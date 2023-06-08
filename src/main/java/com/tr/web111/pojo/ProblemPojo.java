@@ -27,8 +27,16 @@ public class ProblemPojo {
     @TableField(value = "code")
     private String code;
 
-    public ProblemPojo(int uid, String note, String code) {
+    @TableField(value = "title")
+    private String title;
+
+    @TableField(value = "description")
+    private String description;
+
+    public ProblemPojo(int uid, String title, String description, String note, String code) {
         this.uid = uid;
+        this.title = title;
+        this.description = description;
         this.note = note;
         this.code = code;
     }
