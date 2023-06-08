@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "tag")
 public class TagPojo {
