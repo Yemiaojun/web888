@@ -103,4 +103,13 @@ public class TagService {
             tagDao.updateById(tag);
         }
     }
+
+    public void updateCid(int pid, int cid) {
+        TagPojo tag = tagDao.selectById(pid);
+        if (tag != null) {
+            tag.setCid(cid);
+            tag.setDid(null);  // 将did设置为null
+            tagDao.updateById(tag);
+        }
+    }
 }

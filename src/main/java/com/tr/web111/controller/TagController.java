@@ -61,6 +61,9 @@ public class TagController {
             case "did":
                 tagService.updateDid(pid, Integer.parseInt(newValue));
                 break;
+            case "cid":
+                tagService.updateCid(pid, Integer.parseInt(newValue));
+                break;
             default:
                 return Result.errorGetString("未知的属性名：" + propertyName);
         }

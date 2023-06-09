@@ -17,33 +17,37 @@ import java.util.Date;
 public class TagPojo {
 
     @TableId(value = "pid", type = IdType.AUTO)
-    private int pid;
+    private Integer pid;
 
     @TableField(value = "type")
-    private int type;
+    private Integer type;
 
     @TableField(value = "cateID")
-    private int cateID;
+    private Integer cateID;
 
     @TableField(value = "level")
-    private int level;
+    private Integer level;
 
     @TableField(value = "exp")
-    private int exp;
+    private Integer exp;
 
     @TableField(value = "finish")
-    private boolean finish;
+    private Boolean finish;
 
     @TableField(value = "editTime")
     private Date editTime;
 
     @TableField(value = "posID")
-    private int posID;
+    private Integer posID;
 
     @TableField(value = "did")
-    private int did;
+    private Integer did;
 
-    public TagPojo(int pid, int type, int cateID, int level, int exp, boolean finish, Date editTime, int posID, int did) {
+    @TableField(value = "cid")
+    private Integer cid;
+
+
+    public TagPojo(Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did, Integer cid) {
         this.pid = pid;
         this.type = type;
         this.cateID = cateID;
@@ -53,5 +57,6 @@ public class TagPojo {
         this.editTime = editTime;
         this.posID = posID;
         this.did = did;
+        this.cid = cid;
     }
 }
