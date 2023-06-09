@@ -3,6 +3,10 @@ package com.tr.web111.controller;
 
 import com.tr.web111.pojo.TagPojo;
 import com.tr.web111.service.TagService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import utils.Result;
@@ -10,6 +14,7 @@ import utils.Result;
 import java.util.Date;
 import java.util.List;
 
+@Api(value = "标签的相关接口")
 @RestController
 public class TagController {
 
@@ -17,6 +22,18 @@ public class TagController {
     TagService tagService;
 
     // 根据标签查找问题
+    @ApiOperation(value="根据标签查找题目", notes = "根据标签{type,cateID,level,exp,finish,editTime,posID,did}" +
+            "搜索题目，可选择一个或多个标签，非强制要求所有标签都要传参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "类型", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "cateID", value = "类别id", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "level", value = "难度", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "exp", value = "掌握程度", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "finish", value = "完成情况", dataType = "Boolean", paramType = "query", required = true),
+            @ApiImplicitParam(name = "editTime", value = "编辑时间", dataType = "Date", paramType = "query", required = true),
+            @ApiImplicitParam(name = "posID", value = "岗位id", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "did", value = "部门id", dataType = "Integer", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/findProblemsByTag",method = RequestMethod.POST)
     public String findProblemsByTag(@RequestParam(value = "type", required = false) Integer type,
                                     @RequestParam(value = "cateID", required = false) Integer cateID,
@@ -31,6 +48,12 @@ public class TagController {
     }
 
     // 更新标签属性，包括 type、cateID、level、exp、finish、editTime、posID 和 did
+    @ApiOperation(value="更新标签属性", notes = "根据pid、propertyName和newValue更新一道题目有的标签或给题目添加一个标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "propertyName", value = "标签的名字", dataType = "String", paramType = "query", required = true),
+            @ApiImplicitParam(name = "newValue", value = "该标签的值", dataType = "String", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/updateTag",method = RequestMethod.POST)
     public String updateTag(@RequestParam("pid") int pid,
                             @RequestParam("propertyName") String propertyName,

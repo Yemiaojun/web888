@@ -17,12 +17,14 @@ public class ProblemService {
 
     @Autowired
     ProblemDao problemDao;
+
+    @Autowired
     TagDao tagDao;
 
 
     public void addProblem(int uid) {
         // 插入问题
-        ProblemPojo problem = new ProblemPojo(uid, "未命名","无描述", "无备注", "无代码");
+        ProblemPojo problem = new ProblemPojo("未命名","无描述", "无备注", "无代码",uid);
         problemDao.insert(problem);
 
         // 获取插入问题后自动生成的ID

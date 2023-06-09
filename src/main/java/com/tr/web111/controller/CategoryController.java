@@ -3,12 +3,17 @@ package com.tr.web111.controller;
 
 import com.tr.web111.pojo.CategoryPojo;
 import com.tr.web111.service.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import utils.Result;
 
+@Api(value = "类别的相关接口")
 @RestController
 public class CategoryController {
 
@@ -16,6 +21,8 @@ public class CategoryController {
     CategoryService categoryService;
 
     // 查找用户的所有类别
+    @ApiOperation(value="查找所有类别", notes = "根据uid查找用户所有类别")
+    @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true)
     @RequestMapping(value = "/findCategories", method = RequestMethod.GET)
     public String findAllCategoriesByUid(@RequestParam("uid") int uid) {
         List<CategoryPojo> categories = categoryService.findAllCategoriesByUid(uid);
@@ -23,6 +30,11 @@ public class CategoryController {
     }
 
     // 根据名称（字符串匹配）查找类别
+    @ApiOperation(value="字符串匹配查找类别", notes = "根据uid和cateName相似搜索类别")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/findCategoriesByName", method = RequestMethod.GET)
     public String findCategoriesByUidAndCateName(@RequestParam("uid") int uid,
                                                  @RequestParam("cateName") String cateName) {
@@ -31,6 +43,11 @@ public class CategoryController {
     }
 
     // 修改一个类别
+    @ApiOperation(value="修改一个类别", notes = "根据uid和newCateName修改类别名字")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cateId", value = "类别id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "newCateName", value = "新类别名字", dataType = "String", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
     public String updateCategory(@RequestParam("cateId") int cateId,
                                  @RequestParam("newCateName") String newCateName) {
@@ -39,6 +56,10 @@ public class CategoryController {
     }
 
     // 删除一个类别
+    @ApiOperation(value="删除一个类别", notes = "根据cateId删除一个类别")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "cateId", value = "类别id", dataType = "int", paramType = "query", required = true)
+    )
     @RequestMapping(value = "/deleteCategory", method = RequestMethod.DELETE)
     public String deleteCategory(@RequestParam("cateId") int cateId) {
         categoryService.deleteCategory(cateId);
@@ -46,6 +67,11 @@ public class CategoryController {
     }
 
     // 新建一个类别
+    @ApiOperation(value="新建一个类别", notes = "根据uid和cateName新建类别")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/addCategory", method = RequestMethod.POST)
     public String addCategory(@RequestParam("uid") int uid,
                               @RequestParam("cateName") String cateName) {

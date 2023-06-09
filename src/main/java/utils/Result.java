@@ -1,7 +1,10 @@
 package utils;
 import com.alibaba.fastjson2.JSONObject;
+
+
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Result {
     public static String okGetString(String message){

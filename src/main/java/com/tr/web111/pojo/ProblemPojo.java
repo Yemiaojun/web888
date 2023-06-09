@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@ApiModel
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +35,12 @@ public class ProblemPojo {
     @TableField(value = "description")
     private String description;
 
-    public ProblemPojo(int uid, String title, String description, String note, String code) {
-        this.uid = uid;
+    public ProblemPojo(String title, String description, String note, String code, int uid) {
         this.title = title;
         this.description = description;
         this.note = note;
         this.code = code;
+        this.uid = uid;
     }
+
 }
