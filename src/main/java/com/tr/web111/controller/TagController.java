@@ -1,6 +1,7 @@
 // TagController.java
 package com.tr.web111.controller;
 
+import com.tr.web111.pojo.TagPojo;
 import com.tr.web111.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class TagController {
                                     @RequestParam(value = "editTime", required = false) Date editTime,
                                     @RequestParam(value = "posID", required = false) Integer posID,
                                     @RequestParam(value = "did", required = false) Integer did) {
-        Object problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
+        List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
         return Result.okGetStringByData("查询成功", problemPids);
     }
 
