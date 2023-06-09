@@ -15,6 +15,9 @@ public class CompanyService {
     @Autowired
     CompanyDao companyDao;
 
+    @Autowired
+    DepartmentService departmentService;
+
     // 查找用户的所有公司
     public List<CompanyPojo> findAllCompaniesByUid(int uid) {
         return companyDao.selectList(new QueryWrapper<CompanyPojo>().eq("uid", uid));
@@ -38,7 +41,8 @@ public class CompanyService {
 
     // 删除一个公司
     public void deleteCompany(int cid) {
-        companyDao.deleteById(cid);
+        departmentService.deleteAllDepartmentsByCid(cid); // 先删除该公司的所有部门
+        companyDao.deleteById(cid); // 再删除该公司
     }
 
     // 新建一个公司
