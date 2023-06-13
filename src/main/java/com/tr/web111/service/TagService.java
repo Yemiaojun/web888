@@ -3,13 +3,16 @@ package com.tr.web111.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tr.web111.dao.TagDao;
+import com.tr.web111.pojo.ProblemPojo;
 import com.tr.web111.pojo.TagPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 @Service
 public class TagService {
 
@@ -31,13 +34,17 @@ public class TagService {
 
         return tagDao.selectList(queryWrapper);
     }
-
+    public TagPojo findProblemByPid(int pid) {
+        return tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", pid));
+    }
     // 更新 type
     public void updateType(int pid, int type) {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setType(type);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
+
         }
     }
 
@@ -46,6 +53,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setCateID(cateID);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -55,6 +63,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setLevel(level);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -64,6 +73,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setExp(exp);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -73,6 +83,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setFinish(finish);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -82,6 +93,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setEditTime(editTime);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -91,6 +103,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setPosID(posID);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -100,6 +113,7 @@ public class TagService {
         TagPojo tag = tagDao.selectById(pid);
         if (tag != null) {
             tag.setDid(did);
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
         }
     }
@@ -109,7 +123,31 @@ public class TagService {
         if (tag != null) {
             tag.setCid(cid);
             tag.setDid(null);  // 将did设置为null
+            tag.setEditTime(new Date());
             tagDao.updateById(tag);
+        }
+    }
+
+    public String timeSinceLastEdit(int pid) {
+        TagPojo tag = tagDao.selectById(pid);
+        if (tag != null) {
+            Date editDate = tag.getEditTime();
+            LocalDate localEditDate = editDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate now = LocalDate.now();
+            Period period = Period.between(localEditDate, now);
+            int days = period.getDays();
+
+            if (days < 7) {
+                return "近一周";
+            } else if (days < 30) {
+                return "近一个月";
+            } else if (days < 180) {
+                return "近半年";
+            } else {
+                return "超过半年";
+            }
+        } else {
+            return "无此pid对应的Tag信息";
         }
     }
 }
