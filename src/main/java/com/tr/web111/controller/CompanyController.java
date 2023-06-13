@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,9 +65,18 @@ public class CompanyController {
     )
     @RequestMapping(value = "/deleteCompany", method = RequestMethod.DELETE)
     public String deleteCompany(@RequestParam("cid") int cid) {
-        companyService.deleteCompany(cid);
-        return Result.okGetString("公司信息成功删除");
+        try {
+            companyService.deleteCompany(cid);
+            return Result.okGetString("公司信息成功删除");
+        } catch (DataIntegrityViolationException ex) {
+            // catch the exception when the foreign key constraint is violated
+            return Result.errorGetString("无法删除，因为存在相关联的标签。请先删除或修改这些标签后再试");
+        } catch (Exception ex) {
+            // catch any other unexpected exceptions
+            return Result.errorGetString("删除公司信息时发生错误: " + ex.getMessage());
+        }
     }
+
 
     // 新建一个公司
     @ApiOperation(value="新建一个公司", notes = "根据uid和cname新建公司")

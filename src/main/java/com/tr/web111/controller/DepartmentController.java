@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,9 +63,18 @@ public class DepartmentController {
     )
     @RequestMapping(value = "/deleteDepartmentByDid", method = RequestMethod.DELETE)
     public String deleteDepartment(@RequestParam("did") int did) {
-        departmentService.deleteDepartment(did);
-        return Result.okGetString("部门信息成功删除");
+        try {
+            departmentService.deleteDepartment(did);
+            return Result.okGetString("部门信息成功删除");
+        } catch (DataIntegrityViolationException ex) {
+            // catch the exception when the foreign key constraint is violated
+            return Result.errorGetString("无法删除，因为存在相关联的标签。请先删除或修改这些标签后再试");
+        } catch (Exception ex) {
+            // catch any other unexpected exceptions
+            return Result.errorGetString("删除部门信息时发生错误: " + ex.getMessage());
+        }
     }
+
 
     // 新建一条部门
     @ApiOperation(value="新建一个部门", notes = "根据uid和dname和cid新建部门")

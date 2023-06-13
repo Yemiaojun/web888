@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,9 +65,16 @@ public class PositionController {
     )
     @RequestMapping(value = "/deletePosition", method = RequestMethod.DELETE)
     public String deletePosition(@RequestParam("posId") int posId) {
-        positionService.deletePosition(posId);
-        return Result.okGetString("职位信息成功删除");
+        try {
+            positionService.deletePosition(posId);
+            return Result.okGetString("职位信息成功删除");
+        } catch (DataIntegrityViolationException ex) {
+            return Result.errorGetString("无法删除，因为存在相关联的标签。请先删除或修改这些标签后再试");
+        } catch (Exception ex) {  // catch any other unexpected exceptions
+            return Result.errorGetString("删除职位信息时发生错误: " + ex.getMessage());
+        }
     }
+
 
     // 新建一条position
     @ApiOperation(value="新建一个岗位", notes = "根据uid和posName新建岗位")
