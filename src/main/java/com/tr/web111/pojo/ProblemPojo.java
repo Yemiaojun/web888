@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @ApiModel
 @Data
 @AllArgsConstructor
@@ -35,12 +37,15 @@ public class ProblemPojo {
     @TableField(value = "description")
     private String description;
 
+    @TableField(value = "addTime")
+    private Date addTime; // 新增的addTime字段
+
     public ProblemPojo(String title, String description, String note, String code, int uid) {
         this.title = title;
         this.description = description;
         this.note = note;
         this.code = code;
         this.uid = uid;
+        this.addTime = new Date();
     }
-
 }
