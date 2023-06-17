@@ -86,5 +86,6 @@ public class CategoryController {
                               @RequestParam("cateName") String cateName) {
         int newCateId = categoryService.addCategory(uid, cateName);
         return Result.okGetStringByData("类别信息成功添加", newCateId);
+
     }
 }

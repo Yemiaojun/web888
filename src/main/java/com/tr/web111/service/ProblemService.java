@@ -22,18 +22,25 @@ public class ProblemService {
     TagDao tagDao;
 
 
-    public void addProblem(int uid) {
+    public void addProblem(int uid, String title, String description, Integer type, Integer level, Integer cateID, Integer did, Integer posID) {
         // 插入问题
-        ProblemPojo problem = new ProblemPojo("未命名","无描述", "无备注", "无代码",uid);
+        ProblemPojo problem = new ProblemPojo(title, description, "无备注", "无代码",uid);
         problemDao.insert(problem);
 
         // 获取插入问题后自动生成的ID
         int pid = problem.getPid();
 
-        // 创建新的TagPojo对象，除了pid和editTime外，其余都为null
+        // 创建新的TagPojo对象，
         TagPojo tag = new TagPojo();
         tag.setPid(pid);
         tag.setEditTime(new Date());
+        if(type != null) tag.setType(type);
+        else tag.setType(0);
+        if(level != null) tag.setLevel(level);
+        if(cateID != null) tag.setCateID(cateID);
+        if(level != null) tag.setLevel(level);
+        if(did != null) tag.setDid(did);
+        if(posID != null) tag.setPosID(posID);
         // 插入tag到数据库
         tagDao.insert(tag);
     }
