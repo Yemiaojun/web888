@@ -11,6 +11,9 @@ import com.tr.web111.pojo.TagPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -36,9 +39,6 @@ public class ProblemService {
 
     @Autowired
     private CompanyService companyService;
-
-    @Autowired
-    private TagService tagService;
 
     public void addProblem(Integer uid, String title, String description, Integer type, Integer level, Integer cateID, Integer did, Integer posID) {
         // 插入问题
@@ -105,6 +105,28 @@ public class ProblemService {
             problemDao.updateById(problem);
         }
     }
+
+    public String timeSinceLastEdit(Date editDate) {
+        if (editDate != null) {
+            LocalDate localEditDate = editDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate now = LocalDate.now();
+            Period period = Period.between(localEditDate, now);
+            int days = period.getDays();
+
+            if (days < 7) {
+                return "近一周";
+            } else if (days < 30) {
+                return "近一个月";
+            } else if (days < 180) {
+                return "近半年";
+            } else {
+                return "超过半年";
+            }
+        } else {
+            return "无此pid对应的Tag信息";
+        }
+    }
+
     public List<ProblemTagStringDto> findProblemTagStringDtosByUid(int uid) {
         List<ProblemTagStringDto> problemTagDtoList = new ArrayList<>();
 
@@ -136,7 +158,7 @@ public class ProblemService {
             problemTagDto.setFinish(tagPojo.getFinish());
 
             // 调用timeSinceLastEdit方法设置editTime
-            problemTagDto.setEditTime(tagService.timeSinceLastEdit(tagPojo.getPid()));
+            problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getEditTime()));
 
             // 检查是否为null
             if(tagPojo.getPosID() != null) {
@@ -227,7 +249,7 @@ public class ProblemService {
             problemTagDto.setFinish(tagPojo.getFinish());
 
             // 调用timeSinceLastEdit方法设置editTime
-            problemTagDto.setEditTime(tagService.timeSinceLastEdit(tagPojo.getPid()));
+            problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getEditTime()));
 
             problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
             problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
