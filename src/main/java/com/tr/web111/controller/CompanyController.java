@@ -28,8 +28,8 @@ public class CompanyController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true)
             )
-    @RequestMapping(value = "/findCompanies", method = RequestMethod.GET)
-    public String findAllCompaniesByUid(@RequestParam("uid") int uid) {
+    @RequestMapping(value = "/findCompanies/{uid}", method = RequestMethod.GET)
+    public String findAllCompaniesByUid(@PathVariable("uid") int uid) {
         List<CompanyPojo> companies = companyService.findAllCompaniesByUid(uid);
         return Result.okGetStringByData("成功获取公司信息", companies);
     }
@@ -40,9 +40,9 @@ public class CompanyController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "cname", value = "公司名称", dataType = "String", paramType = "query", required = true)
     })
-    @RequestMapping(value = "/findCompaniesByName", method = RequestMethod.GET)
-    public String findCompaniesByUidAndCname(@RequestParam("uid") int uid,
-                                             @RequestParam("cname") String cname) {
+    @RequestMapping(value = "/findCompaniesByName/{uid}/{cname}", method = RequestMethod.GET)
+    public String findCompaniesByUidAndCname(@PathVariable("uid") int uid,
+                                             @PathVariable("cname") String cname) {
         List<CompanyPojo> companies = companyService.findCompaniesByUidAndCname(uid, cname);
         return Result.okGetStringByData("成功获取公司信息", companies);
     }

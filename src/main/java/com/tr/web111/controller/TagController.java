@@ -95,8 +95,8 @@ public class TagController {
 
     @ApiImplicitParam(name = "pid", value = "问题ID", dataType = "int", paramType = "query", required = true)
     @ApiOperation(value = "获取问题的编辑时间", notes = "根据问题ID(pid)获取编辑时间，并返回为“近一周”，“近一个月”，“近半年”等描述")
-    @RequestMapping(value = "/timeSinceLastEdit", method = RequestMethod.GET)
-    public String timeSinceLastEdit(@RequestParam("pid") int pid) {
+    @RequestMapping(value = "/timeSinceLastEdit/{pid}", method = RequestMethod.GET)
+    public String timeSinceLastEdit(@PathVariable("pid") int pid) {
         String timeDescription = tagService.timeSinceLastEdit(pid);
         return Result.okGetStringByData("查询成功", timeDescription);
     }

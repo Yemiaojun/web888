@@ -26,8 +26,8 @@ public class CategoryController {
     // 查找用户的所有类别
     @ApiOperation(value="查找所有类别", notes = "根据uid查找用户所有类别")
     @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true)
-    @RequestMapping(value = "/findCategories", method = RequestMethod.GET)
-    public String findAllCategoriesByUid(@RequestParam("uid") int uid) {
+    @RequestMapping(value = "/findCategories/{uid}", method = RequestMethod.GET)
+    public String findAllCategoriesByUid(@PathVariable("uid") int uid) {
         List<CategoryPojo> categories = categoryService.findAllCategoriesByUid(uid);
         return Result.okGetStringByData("成功获取类别信息", categories);
     }
@@ -38,9 +38,9 @@ public class CategoryController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
     })
-    @RequestMapping(value = "/findCategoriesByName", method = RequestMethod.GET)
-    public String findCategoriesByUidAndCateName(@RequestParam("uid") int uid,
-                                                 @RequestParam("cateName") String cateName) {
+    @RequestMapping(value = "/findCategoriesByName/{uid}/{cateName}", method = RequestMethod.GET)
+    public String findCategoriesByUidAndCateName(@PathVariable("uid") int uid,
+                                                 @PathVariable("cateName") String cateName) {
         List<CategoryPojo> categories = categoryService.findCategoriesByUidAndCateName(uid, cateName);
         return Result.okGetStringByData("成功获取类别信息", categories);
     }

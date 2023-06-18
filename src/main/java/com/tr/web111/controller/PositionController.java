@@ -28,8 +28,8 @@ public class PositionController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true)
     )
-    @RequestMapping(value = "/findPositions", method = RequestMethod.GET)
-    public String findAllPositionsByUid(@RequestParam("uid") int uid) {
+    @RequestMapping(value = "/findPositions/{uid}", method = RequestMethod.GET)
+    public String findAllPositionsByUid(@PathVariable("uid") int uid) {
         List<PositionPojo> positions = positionService.findAllPositionsByUid(uid);
         return Result.okGetStringByData("成功获取职位信息", positions);
     }
@@ -40,9 +40,9 @@ public class PositionController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "posName", value = "岗位名称", dataType = "String", paramType = "query", required = true)
     })
-    @RequestMapping(value = "/findPositionsByName", method = RequestMethod.GET)
-    public String findPositionsByUidAndPosName(@RequestParam("uid") int uid,
-                                               @RequestParam("posName") String posName) {
+    @RequestMapping(value = "/findPositionsByName/{uid}/{posName}", method = RequestMethod.GET)
+    public String findPositionsByUidAndPosName(@PathVariable("uid") int uid,
+                                               @PathVariable("posName") String posName) {
         List<PositionPojo> positions = positionService.findPositionsByUidAndPosName(uid, posName);
         return Result.okGetStringByData("成功获取职位信息", positions);
     }

@@ -28,8 +28,8 @@ public class DepartmentController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true)
     )
-    @RequestMapping(value = "/findDepartments", method = RequestMethod.GET)
-    public String findAllDepartmentsByCid(@RequestParam("cid") int cid) {
+    @RequestMapping(value = "/findDepartments/{cid}", method = RequestMethod.GET)
+    public String findAllDepartmentsByCid(@PathVariable("cid") int cid) {
         List<DepartmentPojo> departments = departmentService.findAllDepartmentsByCid(cid);
         return Result.okGetStringByData("成功获取部门信息", departments);
     }
@@ -40,9 +40,9 @@ public class DepartmentController {
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "dname", value = "部门名称", dataType = "String", paramType = "query", required = true)
     })
-    @RequestMapping(value = "/findDepartmentsByName", method = RequestMethod.GET)
-    public String findDepartmentsByCidAndDname(@RequestParam("cid") int cid,
-                                               @RequestParam("dname") String dname) {
+    @RequestMapping(value = "/findDepartmentsByName/{cid}/{dname}", method = RequestMethod.GET)
+    public String findDepartmentsByCidAndDname(@PathVariable("cid") int cid,
+                                               @PathVariable("dname") String dname) {
         List<DepartmentPojo> departments = departmentService.findDepartmentsByCidAndDname(cid, dname);
         return Result.okGetStringByData("成功获取部门信息", departments);
     }
