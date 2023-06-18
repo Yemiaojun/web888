@@ -1,13 +1,25 @@
 spring:
   datasource:
     username: root
-    password: 041008Ys
+    password: ys030505
     url: jdbc:mysql://localhost:3306/web
     driver-class-name: com.mysql.cj.jdbc.Driver
   mvc:
     pathmatch:
       matching-strategy:  ant_path_matcher
   swagger:enable: true
+
+  filter:
+    name:corsFilter
+    class:com.thetransactioncompany.cors.CORSFilter
+
+  filter-mapping:
+      name:corsFilter
+      url-pattern:/*
+
+
+
+
 
 
   filter-mapping:
