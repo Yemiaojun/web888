@@ -51,6 +51,8 @@ public class TagController {
 
     @ApiOperation(value = "根据标签查找问题", notes = "根据指定的标签查找问题，返回问题及其对应的标签")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户ID", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "title", value = "标题", dataType = "String", paramType = "query", required = true),
             @ApiImplicitParam(name = "type", value = "类型", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "cateID", value = "类别ID", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "level", value = "级别", dataType = "Integer", paramType = "query", required = false),
