@@ -10,6 +10,20 @@ spring:
   swagger:enable: true
 
 
+  filter-mapping:
+    name:corsFilter
+    url-pattern:/*
+
+  filter:
+    name:CORS
+    class:com.thetransactioncompany.cors.CORSFilter
+
+
+
+
+
+
+
 
 
 
