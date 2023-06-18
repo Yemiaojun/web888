@@ -30,4 +30,19 @@ public class UserService {
         // 如果找到对应的用户，则返回用户的ID；否则，返回-1表示查找失败
         return foundUser != null ? foundUser.getID() : -1;
     }
+    public int changePassword(int uid, String password, String newPassword) {
+        UserPojo foundUser = userDao.selectOne(
+                new QueryWrapper<UserPojo>()
+                        .eq("id", uid)
+                        .eq("password", password)
+        );
+        if (foundUser != null) {
+            foundUser.setPassword(newPassword);
+            userDao.updateById(foundUser);
+            return uid;
+        } else {
+            return -1;
+        }
+    }
+
 }

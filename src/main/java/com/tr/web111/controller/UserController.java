@@ -46,4 +46,24 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="修改密码", notes = "输入uid、password和newPassword，如果uid和password匹配，就修改密码为newPassword")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户ID", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "password", value = "原密码", dataType = "String", paramType = "query", required = true),
+            @ApiImplicitParam(name = "newPassword", value = "新密码", dataType = "String", paramType = "query", required = true)
+    })
+    @RequestMapping(value = "/changePassword",method = RequestMethod.POST)
+    public String changePassword(@RequestBody Map<String,Object> user) {
+        int userId = (Integer) user.get("uid");
+        String password = (String) user.get("password");
+        String newPassword = (String) user.get("newPassword");
+        int resultUid = userService.changePassword(userId, password, newPassword);
+        if (resultUid != -1) {
+            return Result.okGetStringByData("密码修改成功", resultUid);
+        } else {
+            return Result.errorGetString("用户ID或原密码错误");
+        }
+    }
+
+
 }
