@@ -52,13 +52,12 @@ public class ProblemService {
         TagPojo tag = new TagPojo();
         tag.setPid(pid);
         tag.setEditTime(new Date());
-        if(type != null) tag.setType(type);
-        else tag.setType(0);
-        if(level != null) tag.setLevel(level);
-        if(cateID != null) tag.setCateID(cateID);
-        if(level != null) tag.setLevel(level);
-        if(did != null) tag.setDid(did);
-        if(posID != null) tag.setPosID(posID);
+        if(type != -1) tag.setType(type);
+        if(level != -1) tag.setLevel(level);
+        if(cateID != -1) tag.setCateID(cateID);
+        if(level != -1) tag.setLevel(level);
+        if(did != -1) tag.setDid(did);
+        if(posID != -1) tag.setPosID(posID);
         // 插入tag到数据库
         tagDao.insert(tag);
     }

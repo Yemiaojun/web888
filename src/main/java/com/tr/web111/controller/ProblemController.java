@@ -29,15 +29,8 @@ public class ProblemController {
             @ApiImplicitParam(name = "title", value = "标题", dataType = "int", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addProblem", method = RequestMethod.POST)
-    public String addProblem(@RequestParam(value = "uid", required = true) int uid,
-                             @RequestParam(value = "title", required = true) String title,
-                             @RequestParam(value = "description", required = true) String description,
-                             @RequestParam(value = "type", required = false) Integer type,
-                             @RequestParam(value = "level", required = false) Integer level,
-                             @RequestParam(value = "cateID", required = false) Integer cateID,
-                             @RequestParam(value = "did", required = false) Integer did,
-                             @RequestParam(value = "posID", required = false) Integer posID) {
-        problemService.addProblem(uid, title, description, type, level, cateID, did, posID);
+    public String addProblem(@RequestBody Map<String,Object> problem) {
+        problemService.addProblem((Integer)problem.get("uid"), (String) problem.get("title"), (String) problem.get("description"), (Integer)problem.get("type"), (Integer)problem.get("level"), (Integer)problem.get("cateID"), (Integer)problem.get("did"), (Integer)problem.get("posID"));
         return Result.okGetString("问题成功添加");
     }
 
