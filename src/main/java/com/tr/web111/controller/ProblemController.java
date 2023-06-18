@@ -133,4 +133,35 @@ public class ProblemController {
         problemService.updateTitle((Integer) prob.get("pid"), (String) prob.get("title"));
         return Result.okGetString("标题成功更新");
     }
+
+    @ApiOperation(value="查找用户所有的题目及相关标签并按等级排序", notes = "根据uid搜索所有题目以及对应的标签，并按等级排序")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
+    )
+    @RequestMapping(value = "/findProblemTagDtosSortByLevel/{uid}", method = RequestMethod.GET)
+    public String findProblemTagDtosByUidSortByLevel(@PathVariable("uid") int uid) {
+        List<ProblemTagStringDto> problemTagDtos = problemService.findProblemTagStringDtosByUidSortByLevel(uid);
+        return Result.okGetStringByData("题目和对应标签成功检索并按等级排序", problemTagDtos);
+    }
+
+    @ApiOperation(value="查找用户所有的题目及相关标签并按经验排序", notes = "根据uid搜索所有题目以及对应的标签，并按经验排序")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
+    )
+    @RequestMapping(value = "/findProblemTagDtosSortByExp/{uid}", method = RequestMethod.GET)
+    public String findProblemTagDtosByUidSortByExp(@PathVariable("uid") int uid) {
+        List<ProblemTagStringDto> problemTagDtos = problemService.findProblemTagStringDtosByUidSortByExp(uid);
+        return Result.okGetStringByData("题目和对应标签成功检索并按经验排序", problemTagDtos);
+    }
+
+    @ApiOperation(value="查找用户所有的题目及相关标签并按添加时间排序", notes = "根据uid搜索所有题目以及对应的标签，并按添加时间排序")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
+    )
+    @RequestMapping(value = "/findProblemTagDtosSortByAddTime/{uid}", method = RequestMethod.GET)
+    public String findProblemTagDtosByUidSortByAddTime(@PathVariable("uid") int uid) {
+        List<ProblemTagStringDto> problemTagDtos = problemService.findProblemTagStringDtosByUidSortByAddTime(uid);
+        return Result.okGetStringByData("题目和对应标签成功检索并按添加时间排序", problemTagDtos);
+    }
+
 }

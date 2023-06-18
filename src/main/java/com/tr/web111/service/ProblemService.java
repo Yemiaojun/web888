@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -179,4 +180,26 @@ public class ProblemService {
 
         return problemTagDtoList;
     }
+
+    public List<ProblemTagStringDto> findProblemTagStringDtosByUidSortByLevel(int uid) {
+        List<ProblemTagStringDto> problemTagDtoList = findProblemTagStringDtosByUid(uid);
+
+        // 使用 Stream API 进行排序
+        problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getLevel));
+
+        return problemTagDtoList;
+    }
+
+    public List<ProblemTagStringDto> findProblemTagStringDtosByUidSortByAddTime(int uid) {
+        List<ProblemTagStringDto> problemTagDtoList = findProblemTagStringDtosByUid(uid);
+        problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getAddTime));
+        return problemTagDtoList;
+    }
+
+    public List<ProblemTagStringDto> findProblemTagStringDtosByUidSortByExp(int uid) {
+        List<ProblemTagStringDto> problemTagDtoList = findProblemTagStringDtosByUid(uid);
+        problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getExp));
+        return problemTagDtoList;
+    }
+
 }
