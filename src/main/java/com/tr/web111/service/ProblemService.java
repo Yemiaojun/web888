@@ -4,11 +4,13 @@ package com.tr.web111.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tr.web111.dao.ProblemDao;
 import com.tr.web111.dao.TagDao;
+import com.tr.web111.dto.ProblemTagDto;
 import com.tr.web111.pojo.ProblemPojo;
 import com.tr.web111.pojo.TagPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,5 +89,40 @@ public class ProblemService {
             problem.setTitle(title);
             problemDao.updateById(problem);
         }
+    }
+    public List<ProblemTagDto> findProblemTagDtosByUid(int uid) {
+        List<ProblemTagDto> problemTagDtoList = new ArrayList<>();
+
+// Find all problems associated with the user.
+        List<ProblemPojo> problemPojoList = problemDao.selectList(new QueryWrapper<ProblemPojo>().eq("uid", uid));
+
+// For each problem, find the associated tag and create a ProblemTagDto.
+        for (ProblemPojo problemPojo : problemPojoList) {
+            TagPojo tagPojo = tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", problemPojo.getPid()));
+
+// Create a new ProblemTagDto object, setting the fields from problemPojo and tagPojo.
+            ProblemTagDto problemTagDto = new ProblemTagDto();
+
+            problemTagDto.setPid(problemPojo.getPid());
+            problemTagDto.setUid(problemPojo.getUid());
+            problemTagDto.setNote(problemPojo.getNote());
+            problemTagDto.setCode(problemPojo.getCode());
+            problemTagDto.setTitle(problemPojo.getTitle());
+            problemTagDto.setDescription(problemPojo.getDescription());
+            problemTagDto.setAddTime(problemPojo.getAddTime());
+            problemTagDto.setType(tagPojo.getType());
+            problemTagDto.setCateID(tagPojo.getCateID());
+            problemTagDto.setLevel(tagPojo.getLevel());
+            problemTagDto.setExp(tagPojo.getExp());
+            problemTagDto.setFinish(tagPojo.getFinish());
+            problemTagDto.setEditTime(tagPojo.getEditTime());
+            problemTagDto.setPosID(tagPojo.getPosID());
+            problemTagDto.setDid(tagPojo.getDid());
+            problemTagDto.setCid(tagPojo.getCid());
+
+            problemTagDtoList.add(problemTagDto);
+        }
+
+        return problemTagDtoList;
     }
 }
