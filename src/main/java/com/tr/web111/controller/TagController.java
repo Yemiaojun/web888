@@ -1,6 +1,7 @@
 // TagController.java
 package com.tr.web111.controller;
 
+import com.tr.web111.dto.ProblemTagStringDto;
 import com.tr.web111.pojo.TagPojo;
 import com.tr.web111.service.TagService;
 import io.swagger.annotations.Api;
@@ -47,6 +48,31 @@ public class TagController {
         List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
         return Result.okGetStringByData("查询成功", problemPids);
     }
+
+    @ApiOperation(value = "根据标签查找问题", notes = "根据指定的标签查找问题，返回问题及其对应的标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "类型", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "cateID", value = "类别ID", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "level", value = "级别", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "exp", value = "经验", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "finish", value = "完成情况", dataType = "Boolean", paramType = "query", required = false),
+            @ApiImplicitParam(name = "editTime", value = "编辑时间", dataType = "Date", paramType = "query", required = false),
+            @ApiImplicitParam(name = "posID", value = "职位ID", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "did", value = "部门ID", dataType = "Integer", paramType = "query", required = false)
+    })
+    @RequestMapping(value = "/findProblemTagDtosByTag", method = RequestMethod.GET)
+    public String findProblemTagDtosByTag(@RequestParam(value = "type", required = false) Integer type,
+                                          @RequestParam(value = "cateID", required = false) Integer cateID,
+                                          @RequestParam(value = "level", required = false) Integer level,
+                                          @RequestParam(value = "exp", required = false) Integer exp,
+                                          @RequestParam(value = "finish", required = false) Boolean finish,
+                                          @RequestParam(value = "editTime", required = false) Date editTime,
+                                          @RequestParam(value = "posID", required = false) Integer posID,
+                                          @RequestParam(value = "did", required = false) Integer did) {
+        List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(type, cateID, level, exp, finish, editTime, posID, did);
+        return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
+    }
+
 
     // 更新标签属性，包括 type、cateID、level、exp、finish、editTime、posID 和 did
     @ApiOperation(value="更新标签属性", notes = "根据pid、propertyName和newValue更新一道题目有的标签或给题目添加一个标签")

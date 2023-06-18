@@ -3,11 +3,13 @@ package com.tr.web111.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tr.web111.dao.TagDao;
+import com.tr.web111.dto.ProblemTagStringDto;
 import com.tr.web111.pojo.ProblemPojo;
 import com.tr.web111.pojo.TagPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
@@ -18,6 +20,21 @@ public class TagService {
 
     @Autowired
     TagDao tagDao;
+
+    @Autowired
+    private PositionService positionService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private ProblemService problemService;
 
     // 根据标签查找问题
     public List<TagPojo> findProblemsByTag(Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
@@ -34,6 +51,49 @@ public class TagService {
 
         return tagDao.selectList(queryWrapper);
     }
+
+    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+        // 根据Tag查找问题
+        List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
+
+        List<ProblemTagStringDto> problemTagDtoList = new ArrayList<>();
+
+        for (TagPojo tagPojo : tagPojoList) {
+            // 根据pid在ProblemService中查找Problem
+            ProblemPojo problemPojo = problemService.findProblemByPid(tagPojo.getPid());
+
+            // 创建一个新的ProblemTagStringDto并设置属性
+            ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
+
+            problemTagDto.setPid(problemPojo.getPid());
+            problemTagDto.setUid(problemPojo.getUid());
+            problemTagDto.setNote(problemPojo.getNote());
+            problemTagDto.setCode(problemPojo.getCode());
+            problemTagDto.setTitle(problemPojo.getTitle());
+            problemTagDto.setDescription(problemPojo.getDescription());
+            problemTagDto.setAddTime(problemPojo.getAddTime());
+            problemTagDto.setType(tagPojo.getType());
+
+            // 使用新的服务方法获取名称
+            problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+            problemTagDto.setLevel(tagPojo.getLevel());
+            problemTagDto.setExp(tagPojo.getExp());
+            problemTagDto.setFinish(tagPojo.getFinish());
+
+            // 调用timeSinceLastEdit方法设置editTime
+            problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getPid()));
+
+            problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+            problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+            problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+
+            problemTagDtoList.add(problemTagDto);
+        }
+
+        return problemTagDtoList;
+    }
+
+
     public TagPojo findProblemByPid(int pid) {
         return tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", pid));
     }
