@@ -82,6 +82,17 @@ public class ProblemController {
         return Result.okGetStringByData("问题成功检索", problem);
     }
 
+    @ApiOperation(value="查看一个题目", notes = "根据title模糊搜索一道题目")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true),
+            @ApiImplicitParam(name = "title", value = "标题", dataType = "String", paramType = "path", required = true),
+    })
+    @RequestMapping(value = "/findProblemsByTitle/{uid}/{title}", method = RequestMethod.GET)
+    public String findProblemsByUidAndTitle(@PathVariable("uid") int uid,
+                                            @PathVariable("title") String title) {
+        List<ProblemTagStringDto> problemTagStringDtos = problemService.findProblemsByUidAndTitle(uid, title);
+        return Result.okGetStringByData("成功获取公司信息", problemTagStringDtos);
+    }
 
     @RequestMapping(value = "/findProblemsByPidList", method = RequestMethod.POST)
     public String findProblemsByPidList(@RequestBody List<Integer> pidList) {
