@@ -317,6 +317,64 @@ public class ProblemService {
         return problemDao.selectOne(queryWrapper);
     }
 
+    public ProblemTagStringDto findProblemTagDtoByPid(int pid) {
+        ProblemPojo problemPojo = problemDao.selectOne(new QueryWrapper<ProblemPojo>().eq("pid", pid));
+
+        if (problemPojo != null) {
+            TagPojo tagPojo = tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", problemPojo.getPid()));
+            if (tagPojo != null) {
+                ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
+
+                problemTagDto.setPid(problemPojo.getPid());
+                problemTagDto.setUid(problemPojo.getUid());
+                problemTagDto.setNote(problemPojo.getNote());
+                problemTagDto.setCode(problemPojo.getCode());
+                problemTagDto.setTitle(problemPojo.getTitle());
+                problemTagDto.setDescription(problemPojo.getDescription());
+                problemTagDto.setAddTime(problemPojo.getAddTime());
+                problemTagDto.setType(tagPojo.getType());
+
+                // 检查是否为null
+                if(tagPojo.getCateID() != null) {
+                    problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+                } else {
+                    problemTagDto.setCateID(""); // 如果为null则设置为空字符串
+                }
+
+                problemTagDto.setLevel(tagPojo.getLevel());
+                problemTagDto.setExp(tagPojo.getExp());
+                problemTagDto.setFinish(tagPojo.getFinish());
+
+                // 调用timeSinceLastEdit方法设置editTime
+                problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getEditTime()));
+
+                // 检查是否为null
+                if(tagPojo.getPosID() != null) {
+                    problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+                } else {
+                    problemTagDto.setPosID(""); // 如果为null则设置为空字符串
+                }
+
+                // 检查是否为null
+                if(tagPojo.getDid() != null) {
+                    problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+                } else {
+                    problemTagDto.setDid(""); // 如果为null则设置为空字符串
+                }
+
+                // 检查是否为null
+                if(tagPojo.getCid() != null) {
+                    problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+                } else {
+                    problemTagDto.setCid(""); // 如果为null则设置为空字符串
+                }
+
+                return problemTagDto;
+            }
+        }
+        return null; //如果找不到对应的ProblemPojo或TagPojo，返回null
+    }
+
 
 
 }

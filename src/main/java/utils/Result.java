@@ -33,14 +33,6 @@ public class    Result {
         String s = JSONObject.toJSONString(map);
         return s;
     }
-    public static String okGetStringBy2Data(String message, Object data1, Object data2){
-        Map<String,Object> map = new HashMap<>();
-        map.put("code",200);
-        map.put("message",message);
-        map.put("data1",data1);
-        map.put("data2",data2);
-        String s = JSONObject.toJSONString(map);
-        return s;
-    }
+
 
 }
