@@ -29,15 +29,8 @@ public class ProblemController {
             @ApiImplicitParam(name = "title", value = "标题", dataType = "int", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addProblem", method = RequestMethod.POST)
-    public String addProblem(@RequestParam(value = "uid", required = true) int uid,
-                             @RequestParam(value = "title", required = true) String title,
-                             @RequestParam(value = "description", required = true) String description,
-                             @RequestParam(value = "type", required = false) Integer type,
-                             @RequestParam(value = "level", required = false) Integer level,
-                             @RequestParam(value = "cateID", required = false) Integer cateID,
-                             @RequestParam(value = "did", required = false) Integer did,
-                             @RequestParam(value = "posID", required = false) Integer posID) {
-        problemService.addProblem(uid, title, description, type, level, cateID, did, posID);
+    public String addProblem(@RequestBody Map<String,String> problem) {
+        problemService.addProblem(Integer.valueOf(problem.get("uid")), (String) problem.get("title"), (String) problem.get("description") , Integer.valueOf(problem.get("type")), Integer.valueOf(problem.get("level")), Integer.valueOf(problem.get("cateID")), Integer.valueOf(problem.get("did")), Integer.valueOf(problem.get("posID")));
         return Result.okGetString("问题成功添加");
     }
 
@@ -82,6 +75,17 @@ public class ProblemController {
         return Result.okGetStringByData("问题成功检索", problem);
     }
 
+    @ApiOperation(value="查看一个题目", notes = "根据title模糊搜索一道题目")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true),
+            @ApiImplicitParam(name = "title", value = "标题", dataType = "String", paramType = "path", required = true),
+    })
+    @RequestMapping(value = "/findProblemsByTitle/{uid}/{title}", method = RequestMethod.GET)
+    public String findProblemsByUidAndTitle(@PathVariable("uid") int uid,
+                                            @PathVariable("title") String title) {
+        List<ProblemTagStringDto> problemTagStringDtos = problemService.findProblemsByUidAndTitle(uid, title);
+        return Result.okGetStringByData("成功获取公司信息", problemTagStringDtos);
+    }
 
     @RequestMapping(value = "/findProblemsByPidList", method = RequestMethod.POST)
     public String findProblemsByPidList(@RequestBody List<Integer> pidList) {
