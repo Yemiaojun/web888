@@ -47,4 +47,8 @@ public class CategoryService {
         categoryDao.insert(newCategory);
         return newCategory.getCateID();  // 返回新类别的ID
     }
+    public String findCateNameByCateId(int cateID) {
+        CategoryPojo category = categoryDao.selectById(cateID);
+        return category != null ? category.getCateName() : null;
+    }
 }

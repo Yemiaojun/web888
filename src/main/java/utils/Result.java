@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Result {
+public class    Result {
     public static String okGetString(String message){
         Map<String,Object> map = new HashMap<>();
         map.put("code",200);

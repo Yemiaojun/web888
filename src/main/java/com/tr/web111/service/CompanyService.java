@@ -51,4 +51,8 @@ public class CompanyService {
         companyDao.insert(newCompany);
         return newCompany.getCid();
     }
+    public String findCompNameByCompId(int compID) {
+        CompanyPojo company = companyDao.selectById(compID);
+        return company != null ? company.getCname() : null;
+    }
 }

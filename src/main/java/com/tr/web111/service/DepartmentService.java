@@ -52,4 +52,9 @@ public class DepartmentService {
             departmentDao.updateById(department);
         }
     }
+
+    public String findDepNameByDepId(int depID) {
+        DepartmentPojo department = departmentDao.selectById(depID);
+        return department != null ? department.getDname() : null;
+    }
 }

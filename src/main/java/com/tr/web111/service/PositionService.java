@@ -47,4 +47,9 @@ public class PositionService {
         positionDao.insert(newPosition);
         return newPosition.getPosID();  // 返回新岗位的ID
     }
+
+    public String findPosNameByPosId(int posID) {
+        PositionPojo position = positionDao.selectById(posID);
+        return position != null ? position.getPosName() : null;
+    }
 }

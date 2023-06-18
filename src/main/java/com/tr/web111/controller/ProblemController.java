@@ -2,6 +2,7 @@
 package com.tr.web111.controller;
 
 import com.tr.web111.dto.ProblemTagDto;
+import com.tr.web111.dto.ProblemTagStringDto;
 import com.tr.web111.service.ProblemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -59,6 +60,17 @@ public class ProblemController {
         List<ProblemTagDto> problemTagDtos = problemService.findProblemTagDtosByUid(uid);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
+
+    @ApiOperation(value="查找用户所有的题目及相关标签，并将标签ID转为名称", notes = "根据uid搜索所有题目以及对应的标签，并将标签ID转为名称")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
+    )
+    @RequestMapping(value = "/findProblemTagStringDtos/{uid}", method = RequestMethod.GET)
+    public String findProblemTagStringDtosByUid(@PathVariable("uid") int uid) {
+        List<ProblemTagStringDto> problemTagStringDtos = problemService.findProblemTagStringDtosByUid(uid);
+        return Result.okGetStringByData("题目和对应标签成功检索，并已将ID转为名称", problemTagStringDtos);
+    }
+
 
     @ApiOperation(value="查看一个题目", notes = "根据pid搜索一道题目")
     @ApiImplicitParams(

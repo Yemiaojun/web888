@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tr.web111.dao.ProblemDao;
 import com.tr.web111.dao.TagDao;
 import com.tr.web111.dto.ProblemTagDto;
+import com.tr.web111.dto.ProblemTagStringDto;
 import com.tr.web111.pojo.ProblemPojo;
 import com.tr.web111.pojo.TagPojo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,20 @@ public class ProblemService {
     @Autowired
     TagDao tagDao;
 
+    @Autowired
+    private PositionService positionService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private TagService tagService;
 
     public void addProblem(int uid, String title, String description, Integer type, Integer level, Integer cateID, Integer did, Integer posID) {
         // 插入问题
@@ -90,17 +105,56 @@ public class ProblemService {
             problemDao.updateById(problem);
         }
     }
-    public List<ProblemTagDto> findProblemTagDtosByUid(int uid) {
-        List<ProblemTagDto> problemTagDtoList = new ArrayList<>();
+    public List<ProblemTagStringDto> findProblemTagStringDtosByUid(int uid) {
+        List<ProblemTagStringDto> problemTagDtoList = new ArrayList<>();
 
-// Find all problems associated with the user.
         List<ProblemPojo> problemPojoList = problemDao.selectList(new QueryWrapper<ProblemPojo>().eq("uid", uid));
 
-// For each problem, find the associated tag and create a ProblemTagDto.
         for (ProblemPojo problemPojo : problemPojoList) {
             TagPojo tagPojo = tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", problemPojo.getPid()));
 
-// Create a new ProblemTagDto object, setting the fields from problemPojo and tagPojo.
+            ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
+
+            problemTagDto.setPid(problemPojo.getPid());
+            problemTagDto.setUid(problemPojo.getUid());
+            problemTagDto.setNote(problemPojo.getNote());
+            problemTagDto.setCode(problemPojo.getCode());
+            problemTagDto.setTitle(problemPojo.getTitle());
+            problemTagDto.setDescription(problemPojo.getDescription());
+            problemTagDto.setAddTime(problemPojo.getAddTime());
+            problemTagDto.setType(tagPojo.getType());
+
+            // 使用新的服务方法获取名称
+            problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+            problemTagDto.setLevel(tagPojo.getLevel());
+            problemTagDto.setExp(tagPojo.getExp());
+            problemTagDto.setFinish(tagPojo.getFinish());
+
+            // 调用timeSinceLastEdit方法设置editTime
+            problemTagDto.setEditTime(tagService.timeSinceLastEdit(tagPojo.getPid()));
+
+            problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+            problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+            problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+
+            problemTagDtoList.add(problemTagDto);
+        }
+
+        return problemTagDtoList;
+    }
+
+
+
+
+    public List<ProblemTagDto> findProblemTagDtosByUid(int uid) {
+        List<ProblemTagDto> problemTagDtoList = new ArrayList<>();
+
+        List<ProblemPojo> problemPojoList = problemDao.selectList(new QueryWrapper<ProblemPojo>().eq("uid", uid));
+
+        for (ProblemPojo problemPojo : problemPojoList) {
+            TagPojo tagPojo = tagDao.selectOne(new QueryWrapper<TagPojo>().eq("pid", problemPojo.getPid()));
+
+
             ProblemTagDto problemTagDto = new ProblemTagDto();
 
             problemTagDto.setPid(problemPojo.getPid());
