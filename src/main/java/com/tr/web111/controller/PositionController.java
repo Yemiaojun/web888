@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 import utils.Result;
 
 @Api(value = "岗位的相关接口")
@@ -52,9 +54,8 @@ public class PositionController {
             @ApiImplicitParam(name = "newPosName", value = "岗位新名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updatePosition", method = RequestMethod.POST)
-    public String updatePosition(@RequestParam("posId") int posId,
-                                 @RequestParam("newPosName") String newPosName) {
-        positionService.updatePosition(posId, newPosName);
+    public String updatePosition(@RequestBody Map<String,Object> position) {
+        positionService.updatePosition((Integer) position.get("posId"), (String) position.get("newPosName"));
         return Result.okGetString("职位信息成功更新");
     }
 
@@ -64,9 +65,9 @@ public class PositionController {
             @ApiImplicitParam(name = "posId", value = "岗位id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deletePosition", method = RequestMethod.DELETE)
-    public String deletePosition(@RequestParam("posId") int posId) {
+    public String deletePosition(@RequestBody Map<String,Object> position) {
         try {
-            positionService.deletePosition(posId);
+            positionService.deletePosition((Integer) position.get("posId"));
             return Result.okGetString("职位信息成功删除");
         } catch (DataIntegrityViolationException ex) {
             return Result.errorGetString("无法删除，因为存在相关联的标签。请先删除或修改这些标签后再试");
@@ -83,9 +84,8 @@ public class PositionController {
             @ApiImplicitParam(name = "posName", value = "岗位名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addPosition", method = RequestMethod.POST)
-    public String addPosition(@RequestParam("uid") int uid,
-                              @RequestParam("posName") String posName) {
-        int newPosId = positionService.addPosition(uid, posName);
+    public String addPosition(@RequestBody Map<String,Object> position) {
+        int newPosId = positionService.addPosition((Integer) position.get("uid"), (String) position.get("posName"));
         return Result.okGetStringByData("职位信息成功添加", newPosId);
     }
 }

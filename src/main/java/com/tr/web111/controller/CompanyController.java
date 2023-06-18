@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 import utils.Result;
 
 @Api(value = "公司的相关接口")
@@ -52,9 +54,8 @@ public class CompanyController {
             @ApiImplicitParam(name = "newCname", value = "公司新名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateCompany", method = RequestMethod.POST)
-    public String updateCompany(@RequestParam("cid") int cid,
-                                @RequestParam("newCname") String newCname) {
-        companyService.updateCompany(cid, newCname);
+    public String updateCompany(@RequestBody Map<String,Object> company) {
+        companyService.updateCompany((Integer) company.get("cid"), (String) company.get("newCname"));
         return Result.okGetString("公司信息成功更新");
     }
 
@@ -64,9 +65,9 @@ public class CompanyController {
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deleteCompany", method = RequestMethod.DELETE)
-    public String deleteCompany(@RequestParam("cid") int cid) {
+    public String deleteCompany(@RequestBody Map<String,Object> company) {
         try {
-            companyService.deleteCompany(cid);
+            companyService.deleteCompany((Integer) company.get("cid"));
             return Result.okGetString("公司信息成功删除");
         } catch (DataIntegrityViolationException ex) {
             // catch the exception when the foreign key constraint is violated
@@ -85,9 +86,8 @@ public class CompanyController {
             @ApiImplicitParam(name = "cname", value = "公司名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addCompany", method = RequestMethod.POST)
-    public String addCompany(@RequestParam("uid") int uid,
-                             @RequestParam("cname") String cname) {
-        int newCid = companyService.addCompany(uid, cname);
+    public String addCompany(@RequestBody Map<String,Object> company) {
+        int newCid = companyService.addCompany((Integer) company.get("uid"), (String) company.get("cname"));
         return Result.okGetStringByData("公司信息成功添加", newCid);
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 import utils.Result;
 
 @Api(value = "部门的相关接口")
@@ -51,8 +53,8 @@ public class DepartmentController {
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deleteDepartmentsByCid", method = RequestMethod.DELETE)
-    public String deleteAllDepartmentsByCid(@RequestParam("cid") int cid) {
-        departmentService.deleteAllDepartmentsByCid(cid);
+    public String deleteAllDepartmentsByCid(@RequestBody Map<String,Object> depart) {
+        departmentService.deleteAllDepartmentsByCid((Integer) depart.get("cid"));
         return Result.okGetString("公司下所有部门信息成功删除");
     }
 
@@ -62,9 +64,9 @@ public class DepartmentController {
             @ApiImplicitParam(name = "did", value = "部门id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deleteDepartmentByDid", method = RequestMethod.DELETE)
-    public String deleteDepartment(@RequestParam("did") int did) {
+    public String deleteDepartment(@RequestBody Map<String,Object> depart) {
         try {
-            departmentService.deleteDepartment(did);
+            departmentService.deleteDepartment((Integer) depart.get("did"));
             return Result.okGetString("部门信息成功删除");
         } catch (DataIntegrityViolationException ex) {
             // catch the exception when the foreign key constraint is violated
@@ -84,10 +86,8 @@ public class DepartmentController {
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addDepartment", method = RequestMethod.POST)
-    public String addDepartment(@RequestParam("uid") int uid,
-                                @RequestParam("dname") String dname,
-                                @RequestParam("cid") int cid) {
-        int newDid = departmentService.addDepartment(uid, dname, cid);
+    public String addDepartment(@RequestBody Map<String,Object> depart) {
+        int newDid = departmentService.addDepartment((Integer) depart.get("uid"), (String) depart.get("dname"), (Integer) depart.get("cid"));
         return Result.okGetStringByData("部门信息成功添加", newDid);
     }
 
@@ -98,9 +98,8 @@ public class DepartmentController {
             @ApiImplicitParam(name = "newDname", value = "部门新名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateDepartment", method = RequestMethod.POST)
-    public String updateDepartment(@RequestParam("did") int did,
-                                   @RequestParam("newDname") String newDname) {
-        departmentService.updateDepartment(did, newDname);
+    public String updateDepartment(@RequestBody Map<String,Object> depart) {
+        departmentService.updateDepartment((Integer) depart.get("did"), (String) depart.get("newDname"));
         return Result.okGetString("部门信息成功更新");
     }
 }

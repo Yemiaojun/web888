@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 import utils.Result;
 
 @Api(value = "类别的相关接口")
@@ -50,9 +52,8 @@ public class CategoryController {
             @ApiImplicitParam(name = "newCateName", value = "新类别名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
-    public String updateCategory(@RequestParam("cateId") int cateId,
-                                 @RequestParam("newCateName") String newCateName) {
-        categoryService.updateCategory(cateId, newCateName);
+    public String updateCategory(@RequestBody Map<String,Object> cate) {
+        categoryService.updateCategory((Integer) cate.get("cateId"), (String) cate.get("newCateName"));
         return Result.okGetString("类别信息成功更新");
     }
 
@@ -62,9 +63,9 @@ public class CategoryController {
             @ApiImplicitParam(name = "cateId", value = "类别id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deleteCategory", method = RequestMethod.DELETE)
-    public String deleteCategory(@RequestParam("cateId") int cateId) {
+    public String deleteCategory(@RequestBody Map<String,Object> cate) {
         try {
-            categoryService.deleteCategory(cateId);
+            categoryService.deleteCategory((Integer) cate.get("cateId"));
             return Result.okGetString("类别信息成功删除");
         } catch (DataIntegrityViolationException ex) {
             // catch the exception when the foreign key constraint is violated
@@ -82,9 +83,8 @@ public class CategoryController {
             @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addCategory", method = RequestMethod.POST)
-    public String addCategory(@RequestParam("uid") int uid,
-                              @RequestParam("cateName") String cateName) {
-        int newCateId = categoryService.addCategory(uid, cateName);
+    public String addCategory(@RequestBody Map<String,Object> cate) {
+        int newCateId = categoryService.addCategory((Integer) cate.get("uid"), (String) cate.get("cateName"));
         return Result.okGetStringByData("类别信息成功添加", newCateId);
 
     }

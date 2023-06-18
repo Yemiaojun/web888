@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 import utils.Result;
 
 @Api(value = "题目的相关接口")
@@ -20,9 +22,10 @@ public class ProblemController {
     ProblemService problemService;
 
     @ApiOperation(value="添加一道题目", notes = "根据uid添加一道题目")
-    @ApiImplicitParams(
-            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true)
-    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "title", value = "标题", dataType = "int", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/addProblem", method = RequestMethod.POST)
     public String addProblem(@RequestParam(value = "uid", required = true) int uid,
                              @RequestParam(value = "title", required = true) String title,
@@ -69,23 +72,22 @@ public class ProblemController {
             @ApiImplicitParam(name = "note", value = "笔记内容", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateNote", method = RequestMethod.POST)
-    public String updateNote(@RequestParam("pid") int pid,
-                             @RequestParam("note") String note) {
-        problemService.updateNote(pid, note);
+    public String updateNote(@RequestBody Map<String,Object> prob) {
+        problemService.updateNote((Integer) prob.get("pid"), (String) prob.get("note"));
         return Result.okGetString("笔记成功更新");
     }
 
     @ApiOperation(value="更新题目代码", notes = "根据pid和code更新题目")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(name = "code", value = "代码内容", dataType = "String", paramType = "query", required = true)
+            @ApiImplicitParam(name = "code", value = "代码内容", dataType = "String", paramType = "body", required = true)
     })
     @RequestMapping(value = "/updateCode", method = RequestMethod.POST)
-    public String updateCode(@RequestParam("pid") int pid,
-                             @RequestParam("code") String code) {
-        problemService.updateCode(pid, code);
+    public String updateCode(@RequestBody Map<String,Object> prob) {
+        problemService.updateCode((Integer) prob.get("pid"), (String) prob.get("code"));
         return Result.okGetString("代码成功更新");
     }
+
 
     @ApiOperation(value="更新题目描述", notes = "根据pid和description更新题目")
     @ApiImplicitParams({
@@ -93,9 +95,8 @@ public class ProblemController {
             @ApiImplicitParam(name = "description", value = "描述内容", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateDescription", method = RequestMethod.POST)
-    public String updateDescription(@RequestParam("pid") int pid,
-                                    @RequestParam("description") String description) {
-        problemService.updateDescription(pid, description);
+    public String updateDescription(@RequestBody Map<String,Object> prob) {
+        problemService.updateDescription((Integer) prob.get("pid"), (String) prob.get("description"));
         return Result.okGetString("描述成功更新");
     }
 
@@ -105,9 +106,8 @@ public class ProblemController {
             @ApiImplicitParam(name = "title", value = "标题", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateTitle", method = RequestMethod.POST)
-    public String updateTitle(@RequestParam("pid") int pid,
-                              @RequestParam("title") String title) {
-        problemService.updateTitle(pid, title);
+    public String updateTitle(@RequestBody Map<String,Object> prob) {
+        problemService.updateTitle((Integer) prob.get("pid"), (String) prob.get("title"));
         return Result.okGetString("标题成功更新");
     }
 }

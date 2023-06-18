@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import utils.Result;
 
+import java.util.Map;
+
 @Api(value = "用户的相关接口")
 @RestController
 public class UserController {
@@ -22,10 +24,16 @@ public class UserController {
             @ApiImplicitParam(name = "username", value = "用户名字", dataType = "String", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "密码", dataType = "String", paramType = "query", required = true)
     })
+//    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+//    public String addUser(@RequestParam("username") String username,
+//                          @RequestParam("password") String password){
+//        int newUserId = userService.addUser(username, password);
+//        return Result.okGetStringByData("添加成功", newUserId);
+//    }
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
-    public String addUser(@RequestParam("username") String username,
-                          @RequestParam("password") String password){
-        int newUserId = userService.addUser(username, password);
+    public String addUser(@RequestBody Map<String,Object> user){
+
+        int newUserId = userService.addUser((String) user.get("username"), (String) user.get("password"));
         return Result.okGetStringByData("添加成功", newUserId);
     }
 
@@ -36,14 +44,14 @@ public class UserController {
             @ApiImplicitParam(name = "password", value = "密码", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/findUser",method = RequestMethod.POST)
-    public String findUser(@RequestParam("username") String username,
-                           @RequestParam("password") String password){
-        int foundUserId = userService.findUser(username, password);
+    public String findUser(@RequestBody Map<String,Object> user){
+        int foundUserId = userService.findUser((String) user.get("username"), (String) user.get("password"));
         if (foundUserId != -1) {
             return Result.okGetStringByData("登录成功", foundUserId);
         } else {
             return Result.errorGetString("用户名或密码错误");
         }
     }
+
 
 }
