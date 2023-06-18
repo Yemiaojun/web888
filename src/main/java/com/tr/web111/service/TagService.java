@@ -52,46 +52,50 @@ public class TagService {
         return tagDao.selectList(queryWrapper);
     }
 
-    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
         // 根据Tag查找问题
         List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
 
         List<ProblemTagStringDto> problemTagDtoList = new ArrayList<>();
 
         for (TagPojo tagPojo : tagPojoList) {
-            // 根据pid在ProblemService中查找Problem
-            ProblemPojo problemPojo = problemService.findProblemByPid(tagPojo.getPid());
+            // 根据pid, uid和title在ProblemService中查找Problem
+            ProblemPojo problemPojo = problemService.findProblemByPidAndUidAndTitle(tagPojo.getPid(), uid, title);
 
-            // 创建一个新的ProblemTagStringDto并设置属性
-            ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
+            // 如果找到符合条件的问题，添加到结果列表
+            if (problemPojo != null) {
+                // 创建一个新的ProblemTagStringDto并设置属性
+                ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
 
-            problemTagDto.setPid(problemPojo.getPid());
-            problemTagDto.setUid(problemPojo.getUid());
-            problemTagDto.setNote(problemPojo.getNote());
-            problemTagDto.setCode(problemPojo.getCode());
-            problemTagDto.setTitle(problemPojo.getTitle());
-            problemTagDto.setDescription(problemPojo.getDescription());
-            problemTagDto.setAddTime(problemPojo.getAddTime());
-            problemTagDto.setType(tagPojo.getType());
+                problemTagDto.setPid(problemPojo.getPid());
+                problemTagDto.setUid(problemPojo.getUid());
+                problemTagDto.setNote(problemPojo.getNote());
+                problemTagDto.setCode(problemPojo.getCode());
+                problemTagDto.setTitle(problemPojo.getTitle());
+                problemTagDto.setDescription(problemPojo.getDescription());
+                problemTagDto.setAddTime(problemPojo.getAddTime());
+                problemTagDto.setType(tagPojo.getType());
 
-            // 使用新的服务方法获取名称
-            problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
-            problemTagDto.setLevel(tagPojo.getLevel());
-            problemTagDto.setExp(tagPojo.getExp());
-            problemTagDto.setFinish(tagPojo.getFinish());
+                // 使用新的服务方法获取名称
+                problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+                problemTagDto.setLevel(tagPojo.getLevel());
+                problemTagDto.setExp(tagPojo.getExp());
+                problemTagDto.setFinish(tagPojo.getFinish());
 
-            // 调用timeSinceLastEdit方法设置editTime
-            problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getPid()));
+                // 调用timeSinceLastEdit方法设置editTime
+                problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getPid()));
 
-            problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
-            problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
-            problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+                problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+                problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+                problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
 
-            problemTagDtoList.add(problemTagDto);
+                problemTagDtoList.add(problemTagDto);
+            }
         }
 
         return problemTagDtoList;
     }
+
 
 
     public TagPojo findProblemByPid(int pid) {

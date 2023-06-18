@@ -305,4 +305,12 @@ public class ProblemService {
         return problemTagDtoList;
     }
 
+    public ProblemPojo findProblemByPidAndUidAndTitle(Integer pid, Integer uid, String title) {
+        QueryWrapper<ProblemPojo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pid", pid).eq("uid", uid).eq("title", title);
+        return problemDao.selectOne(queryWrapper);
+    }
+
+
+
 }
