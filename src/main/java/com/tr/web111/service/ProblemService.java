@@ -242,8 +242,13 @@ public class ProblemService {
             problemTagDto.setAddTime(problemPojo.getAddTime());
             problemTagDto.setType(tagPojo.getType());
 
-            // 使用新的服务方法获取名称
-            problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+            // 检查是否为null
+            if(tagPojo.getCateID() != null) {
+                problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+            } else {
+                problemTagDto.setCateID(""); // 如果为null则设置为空字符串
+            }
+
             problemTagDto.setLevel(tagPojo.getLevel());
             problemTagDto.setExp(tagPojo.getExp());
             problemTagDto.setFinish(tagPojo.getFinish());
@@ -251,15 +256,33 @@ public class ProblemService {
             // 调用timeSinceLastEdit方法设置editTime
             problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getEditTime()));
 
-            problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
-            problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
-            problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+            // 检查是否为null
+            if(tagPojo.getPosID() != null) {
+                problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+            } else {
+                problemTagDto.setPosID(""); // 如果为null则设置为空字符串
+            }
+
+            // 检查是否为null
+            if(tagPojo.getDid() != null) {
+                problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+            } else {
+                problemTagDto.setDid(""); // 如果为null则设置为空字符串
+            }
+
+            // 检查是否为null
+            if(tagPojo.getCid() != null) {
+                problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+            } else {
+                problemTagDto.setCid(""); // 如果为null则设置为空字符串
+            }
 
             problemTagDtoList.add(problemTagDto);
         }
 
         return problemTagDtoList;
     }
+
 
     public List<ProblemTagStringDto> findProblemTagStringDtosByUidSortByLevel(int uid) {
         List<ProblemTagStringDto> problemTagDtoList = findProblemTagStringDtosByUid(uid);
