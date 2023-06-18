@@ -49,7 +49,7 @@ public class ProblemController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
     )
     @RequestMapping(value = "/findProblemTagDtos/{uid}", method = RequestMethod.GET)
-    public String findProblemTagDtos(@PathVariable("uid") int uid) {
+    public String findProblemTagDtosByUid(@PathVariable("uid") int uid) {
         List<ProblemTagDto> problemTagDtos = problemService.findProblemTagDtosByUid(uid);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
@@ -59,7 +59,7 @@ public class ProblemController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
     )
     @RequestMapping(value = "/findProblemTagStringDtos/{uid}", method = RequestMethod.GET)
-    public String findProblemTagStringDtos(@PathVariable("uid") int uid) {
+    public String findProblemTagStringDtosByUid(@PathVariable("uid") int uid) {
         List<ProblemTagStringDto> problemTagStringDtos = problemService.findProblemTagStringDtosByUid(uid);
         return Result.okGetStringByData("题目和对应标签成功检索，并已将ID转为名称", problemTagStringDtos);
     }

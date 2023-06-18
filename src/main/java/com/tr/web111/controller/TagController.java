@@ -60,15 +60,15 @@ public class TagController {
             @ApiImplicitParam(name = "posID", value = "职位ID", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "did", value = "部门ID", dataType = "Integer", paramType = "query", required = false)
     })
-    @RequestMapping(value = "/findProblemTagDtosByTag", method = RequestMethod.GET)
-    public String findProblemTagDtosByTag(@RequestParam(value = "type", required = false) Integer type,
-                                          @RequestParam(value = "cateID", required = false) Integer cateID,
-                                          @RequestParam(value = "level", required = false) Integer level,
-                                          @RequestParam(value = "exp", required = false) Integer exp,
-                                          @RequestParam(value = "finish", required = false) Boolean finish,
-                                          @RequestParam(value = "editTime", required = false) Date editTime,
-                                          @RequestParam(value = "posID", required = false) Integer posID,
-                                          @RequestParam(value = "did", required = false) Integer did) {
+    @RequestMapping(value = "/findProblemTagDtosByTag/{type}/{cateID}/{level}/{exp}/{finish}/{editTime}/{posID}/{did}", method = RequestMethod.GET)
+    public String findProblemTagDtosByTag(@PathVariable(value = "type", required = false) Integer type,
+                                          @PathVariable(value = "cateID", required = false) Integer cateID,
+                                          @PathVariable(value = "level", required = false) Integer level,
+                                          @PathVariable(value = "exp", required = false) Integer exp,
+                                          @PathVariable(value = "finish", required = false) Boolean finish,
+                                          @PathVariable(value = "editTime", required = false) Date editTime,
+                                          @PathVariable(value = "posID", required = false) Integer posID,
+                                          @PathVariable(value = "did", required = false) Integer did) {
         List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(type, cateID, level, exp, finish, editTime, posID, did);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
