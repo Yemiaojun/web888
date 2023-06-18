@@ -53,8 +53,8 @@ public class UserController {
             @ApiImplicitParam(name = "newPassword", value = "新密码", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/changePassword",method = RequestMethod.POST)
-    public String changePassword(@RequestBody Map<String,Object> user) {
-        int userId = (Integer) user.get("uid");
+    public String changePassword(@RequestBody Map<String,String> user) {
+        int userId = Integer.valueOf(user.get("uid"));
         String password = (String) user.get("password");
         String newPassword = (String) user.get("newPassword");
         int resultUid = userService.changePassword(userId, password, newPassword);
