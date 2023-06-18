@@ -30,7 +30,7 @@ public class ProblemController {
     })
     @RequestMapping(value = "/addProblem", method = RequestMethod.POST)
     public String addProblem(@RequestBody Map<String,Object> problem) {
-        problemService.addProblem((Integer)problem.get("uid"), (String) problem.get("title"), (String) problem.get("description"), (Integer)problem.get("type"), (Integer)problem.get("level"), (Integer)problem.get("cateID"), (Integer)problem.get("did"), (Integer)problem.get("posID"));
+        problemService.addProblem(Integer.valueOf((String) problem.get("uid")) , (String) problem.get("title"), (String) problem.get("description"), Integer.valueOf((String) problem.get("type")), Integer.valueOf((String) problem.get("level")), Integer.valueOf((String) problem.get("cateID")), Integer.valueOf((String) problem.get("did")), Integer.valueOf((String) problem.get("posID")));
         return Result.okGetString("问题成功添加");
     }
 

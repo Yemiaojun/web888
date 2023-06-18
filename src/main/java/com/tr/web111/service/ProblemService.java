@@ -40,7 +40,7 @@ public class ProblemService {
     @Autowired
     private TagService tagService;
 
-    public void addProblem(int uid, String title, String description, Integer type, Integer level, Integer cateID, Integer did, Integer posID) {
+    public void addProblem(Integer uid, String title, String description, Integer type, Integer level, Integer cateID, Integer did, Integer posID) {
         // 插入问题
         ProblemPojo problem = new ProblemPojo(title, description, "无备注", "无代码",uid);
         problemDao.insert(problem);
