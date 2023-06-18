@@ -70,9 +70,13 @@ public class ProblemController {
             @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "path", required = true)
     )
     @RequestMapping(value = "/findProblem/{pid}", method = RequestMethod.GET)
-    public String findProblemByPid(@PathVariable("pid") int pid) {
-        Object problem = problemService.findProblemByPid(pid);
-        return Result.okGetStringByData("问题成功检索", problem);
+    public String findProblemTagDtoByPid(@PathVariable("pid") int pid) {
+        ProblemTagStringDto problemTagDto = problemService.findProblemTagDtoByPid(pid);
+        if (problemTagDto != null) {
+            return Result.okGetStringByData("问题成功检索", problemTagDto);
+        } else {
+            return Result.errorGetString("找不到对应的题目");
+        }
     }
 
     @ApiOperation(value="查看一个题目", notes = "根据title模糊搜索一道题目")

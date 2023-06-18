@@ -93,8 +93,8 @@ public class TagController {
             @ApiImplicitParam(name = "posID", value = "职位ID", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "did", value = "部门ID", dataType = "Integer", paramType = "query", required = false)
     })
-    @RequestMapping(value = "/findDtosByTagUid/{uid}/{pid}/{type}/{cateID}/{level}/{exp}/{finish}/{editTime}/{posID}/{did}", method = RequestMethod.GET)
-    public String findDtosByTagUid(@PathVariable(value = "uid", required = true) Integer uid,
+    @RequestMapping(value = "/findDtosByTagPid/{uid}/{pid}/{type}/{cateID}/{level}/{exp}/{finish}/{editTime}/{posID}/{did}", method = RequestMethod.GET)
+    public String findDtosByTagPid(@PathVariable(value = "uid", required = true) Integer uid,
                                    @PathVariable(value = "pid", required = true) Integer pid,
                                    @PathVariable(value = "type", required = false) Integer type,
                                    @PathVariable(value = "cateID", required = false) Integer cateID,
