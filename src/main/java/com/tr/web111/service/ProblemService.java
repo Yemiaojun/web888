@@ -311,6 +311,12 @@ public class ProblemService {
         return problemDao.selectOne(queryWrapper);
     }
 
+    public ProblemPojo findProblemByPidAndUid(Integer pid, Integer uid) {
+        QueryWrapper<ProblemPojo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pid", pid).eq("uid", uid);
+        return problemDao.selectOne(queryWrapper);
+    }
+
 
 
 }

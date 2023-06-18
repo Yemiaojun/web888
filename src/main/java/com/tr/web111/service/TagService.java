@@ -52,6 +52,24 @@ public class TagService {
         return tagDao.selectList(queryWrapper);
     }
 
+    public TagPojo findProblemByTag(int pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+        QueryWrapper<TagPojo> queryWrapper = new QueryWrapper<>();
+
+        // 在这里增加pid的查询条件
+        queryWrapper.eq("pid", pid);
+
+        if (type != null) queryWrapper.eq("type", type);
+        if (cateID != null) queryWrapper.eq("cateID", cateID);
+        if (level != null) queryWrapper.eq("level", level);
+        if (exp != null) queryWrapper.eq("exp", exp);
+        if (finish != null) queryWrapper.eq("finish", finish);
+        if (editTime != null) queryWrapper.eq("editTime", editTime);
+        if (posID != null) queryWrapper.eq("posID", posID);
+        if (did != null) queryWrapper.eq("did", did);
+
+        return tagDao.selectOne(queryWrapper);
+    }
+
     public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
         // 根据Tag查找问题
         List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
@@ -94,6 +112,70 @@ public class TagService {
         }
 
         return problemTagDtoList;
+    }
+
+    public ProblemTagStringDto findDtoByTagUid(Integer uid, Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+        // 根据pid和uid在ProblemService中查找Problem
+        ProblemPojo problemPojo = problemService.findProblemByPidAndUid(pid, uid);
+
+        // 如果找到符合条件的问题
+        if (problemPojo != null) {
+            // 查找标签
+            TagPojo tagPojo = findProblemByTag(pid, type, cateID, level, exp, finish, editTime, posID, did);
+
+            // 如果找到符合条件的标签，创建ProblemTagStringDto并设置属性
+            if (tagPojo != null) {
+                ProblemTagStringDto problemTagDto = new ProblemTagStringDto();
+
+                problemTagDto.setPid(problemPojo.getPid());
+                problemTagDto.setUid(problemPojo.getUid());
+                problemTagDto.setNote(problemPojo.getNote());
+                problemTagDto.setCode(problemPojo.getCode());
+                problemTagDto.setTitle(problemPojo.getTitle());
+                problemTagDto.setDescription(problemPojo.getDescription());
+                problemTagDto.setAddTime(problemPojo.getAddTime());
+                problemTagDto.setType(tagPojo.getType());
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getCateID() != null) {
+                    problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+                } else {
+                    problemTagDto.setCateID("");
+                }
+
+                problemTagDto.setLevel(tagPojo.getLevel());
+                problemTagDto.setExp(tagPojo.getExp());
+                problemTagDto.setFinish(tagPojo.getFinish());
+
+                // 调用timeSinceLastEdit方法设置editTime
+                problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getPid()));
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getPosID() != null) {
+                    problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+                } else {
+                    problemTagDto.setPosID("");
+                }
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getDid() != null) {
+                    problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+                } else {
+                    problemTagDto.setDid("");
+                }
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getCid() != null) {
+                    problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+                } else {
+                    problemTagDto.setCid("");
+                }
+
+                return problemTagDto;
+            }
+        }
+
+        return null;
     }
 
 

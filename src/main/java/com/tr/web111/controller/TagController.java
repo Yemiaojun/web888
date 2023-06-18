@@ -77,6 +77,34 @@ public class TagController {
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
 
+    @ApiOperation(value = "根据标签查找问题", notes = "根据指定的标签查找问题，返回问题及其对应的标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户ID", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "pid", value = "问题ID", dataType = "Integer", paramType = "query", required = true),
+            @ApiImplicitParam(name = "type", value = "类型", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "cateID", value = "类别ID", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "level", value = "级别", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "exp", value = "经验", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "finish", value = "完成情况", dataType = "Boolean", paramType = "query", required = false),
+            @ApiImplicitParam(name = "editTime", value = "编辑时间", dataType = "Date", paramType = "query", required = false),
+            @ApiImplicitParam(name = "posID", value = "职位ID", dataType = "Integer", paramType = "query", required = false),
+            @ApiImplicitParam(name = "did", value = "部门ID", dataType = "Integer", paramType = "query", required = false)
+    })
+    @RequestMapping(value = "/findDtosByTagUid/{uid}/{pid}/{type}/{cateID}/{level}/{exp}/{finish}/{editTime}/{posID}/{did}", method = RequestMethod.GET)
+    public String findDtosByTagUid(@PathVariable(value = "uid", required = true) Integer uid,
+                                   @PathVariable(value = "pid", required = true) Integer pid,
+                                   @PathVariable(value = "type", required = false) Integer type,
+                                   @PathVariable(value = "cateID", required = false) Integer cateID,
+                                   @PathVariable(value = "level", required = false) Integer level,
+                                   @PathVariable(value = "exp", required = false) Integer exp,
+                                   @PathVariable(value = "finish", required = false) Boolean finish,
+                                   @PathVariable(value = "editTime", required = false) Date editTime,
+                                   @PathVariable(value = "posID", required = false) Integer posID,
+                                   @PathVariable(value = "did", required = false) Integer did) {
+        ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTime, posID, did);
+        return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
+    }
+
 
 
     // 更新标签属性，包括 type、cateID、level、exp、finish、editTime、posID 和 did
