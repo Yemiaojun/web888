@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
@@ -70,7 +71,7 @@ public class TagService {
         return tagDao.selectOne(queryWrapper);
     }
 
-    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did, String sort) {
         // 根据Tag查找问题
         List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
 
@@ -111,8 +112,33 @@ public class TagService {
             }
         }
 
+        // 根据sort参数排序问题列表
+        if (sort != null) {
+            switch (sort) {
+                case "难度":
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getLevel, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+                case "添加时间":
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getAddTime, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+                case "编辑时间":
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getEditTime, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+                case "掌握程度":
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getExp, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+                case "pid":
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getPid, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+                default:
+                    problemTagDtoList.sort(Comparator.comparing(ProblemTagStringDto::getPid, Comparator.nullsLast(Comparator.naturalOrder())));
+                    break;
+            }
+        }
+
         return problemTagDtoList;
     }
+
 
     public ProblemTagStringDto findDtoByTagUid(Integer uid, Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
         // 根据pid和uid在ProblemService中查找Problem
