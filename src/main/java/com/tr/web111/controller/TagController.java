@@ -75,6 +75,7 @@ public class TagController {
                                           @RequestParam(value = "posID", required = false) Integer posID,
                                           @RequestParam(value = "did", required = false) Integer did,
                                           @RequestParam(value = "sort", required = false) String sort) {
+        if(editTimeStr==null)editTimeStr="0";
         List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(uid, title, type, cateID, level, exp, finish, editTimeStr, posID, did, sort);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
