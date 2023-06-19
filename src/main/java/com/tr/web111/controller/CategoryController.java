@@ -52,8 +52,8 @@ public class CategoryController {
             @ApiImplicitParam(name = "newCateName", value = "新类别名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
-    public String updateCategory(@RequestBody Map<String,Object> cate) {
-        categoryService.updateCategory((Integer) cate.get("cateId"), (String) cate.get("newCateName"));
+    public String updateCategory(@RequestBody Map<String,String> cate) {
+        categoryService.updateCategory(Integer.valueOf(cate.get("cateId")) , (String) cate.get("newCateName"));
         return Result.okGetString("类别信息成功更新");
     }
 

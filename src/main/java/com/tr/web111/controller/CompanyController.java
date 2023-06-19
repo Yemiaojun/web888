@@ -54,8 +54,8 @@ public class CompanyController {
             @ApiImplicitParam(name = "newCname", value = "公司新名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateCompany", method = RequestMethod.POST)
-    public String updateCompany(@RequestBody Map<String,Object> company) {
-        companyService.updateCompany((Integer) company.get("cid"), (String) company.get("newCname"));
+    public String updateCompany(@RequestBody Map<String,String> company) {
+        companyService.updateCompany(Integer.valueOf(company.get("cid")) , (String) company.get("newCname"));
         return Result.okGetString("公司信息成功更新");
     }
 

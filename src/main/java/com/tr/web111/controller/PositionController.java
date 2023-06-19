@@ -54,8 +54,8 @@ public class PositionController {
             @ApiImplicitParam(name = "newPosName", value = "岗位新名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updatePosition", method = RequestMethod.POST)
-    public String updatePosition(@RequestBody Map<String,Object> position) {
-        positionService.updatePosition((Integer) position.get("posId"), (String) position.get("newPosName"));
+    public String updatePosition(@RequestBody Map<String,String> position) {
+        positionService.updatePosition(Integer.valueOf(position.get("posId")), (String) position.get("newPosName"));
         return Result.okGetString("职位信息成功更新");
     }
 

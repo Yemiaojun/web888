@@ -98,8 +98,8 @@ public class DepartmentController {
             @ApiImplicitParam(name = "newDname", value = "部门新名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateDepartment", method = RequestMethod.POST)
-    public String updateDepartment(@RequestBody Map<String,Object> depart) {
-        departmentService.updateDepartment((Integer) depart.get("did"), (String) depart.get("newDname"));
+    public String updateDepartment(@RequestBody Map<String,String> depart) {
+        departmentService.updateDepartment(Integer.valueOf(depart.get("did")) , (String) depart.get("newDname"));
         return Result.okGetString("部门信息成功更新");
     }
 }
