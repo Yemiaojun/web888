@@ -376,6 +376,9 @@ public class ProblemService {
         return null; //如果找不到对应的ProblemPojo或TagPojo，返回null
     }
 
+    public void deleteProblem(Integer pid) {
+        problemDao.deleteById(pid);
+    }
 
 
 }

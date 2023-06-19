@@ -4,11 +4,13 @@ package com.tr.web111.controller;
 import com.tr.web111.dto.ProblemTagDto;
 import com.tr.web111.dto.ProblemTagStringDto;
 import com.tr.web111.service.ProblemService;
+import com.tr.web111.service.TagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class ProblemController {
 
     @Autowired
     ProblemService problemService;
+    @Autowired
+    TagService tagService;
 
     @ApiOperation(value="添加一道题目", notes = "根据uid添加一道题目")
     @ApiImplicitParams({
@@ -172,4 +176,23 @@ public class ProblemController {
         return Result.okGetStringByData("题目和对应标签成功检索并按添加时间排序", problemTagDtos);
     }
 
+    @ApiOperation(value="删除一个题目", notes = "根据pid删除一个题目")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true)
+    )
+    @RequestMapping(value = "/deleteProblem", method = RequestMethod.DELETE)
+    public String deleteProblem(@RequestBody Map<String,Object> problem) {
+        try {
+            tagService.deleteTag((Integer) problem.get("pid"));
+            problemService.deleteProblem((Integer) problem.get("pid"));
+
+            return Result.okGetString("题目成功删除");
+        } catch (DataIntegrityViolationException ex) {
+            // catch the exception when the foreign key constraint is violated
+            return Result.errorGetString("无法删除");
+        } catch (Exception ex) {
+            // catch any other unexpected exceptions
+            return Result.errorGetString("删除题目信息时发生错误: " + ex.getMessage());
+        }
+    }
 }

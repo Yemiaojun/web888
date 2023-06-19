@@ -364,4 +364,7 @@ public class TagService {
         return dateRange;
     }
 
+    public void deleteTag(Integer pid) {
+        tagDao.deleteById(pid);
+    }
 }
