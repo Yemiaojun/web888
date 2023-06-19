@@ -116,38 +116,38 @@ public class TagController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "propertyName", value = "标签的名字", dataType = "String", paramType = "query", required = true),
-            @ApiImplicitParam(name = "newValue", value = "该标签的值", dataType = "String", paramType = "query", required = true)
+            @ApiImplicitParam(name = "newValue", value = "该标签的值", dataType = "Integer", paramType = "query", required = true)
     })
     @RequestMapping(value = "/updateTag",method = RequestMethod.POST)
-    public String updateTag(@RequestBody Map<String,Object> tag) {
+    public String updateTag(@RequestBody Map<String,String> tag) {
         switch ((String) tag.get("propertyName")) {
             case "type":
-                tagService.updateType((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateType(Integer.valueOf(tag.get("pid")) , Integer.parseInt(tag.get("newValue")));
                 break;
             case "cateID":
-                tagService.updateCateID((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateCateID(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             case "level":
-                tagService.updateLevel((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateLevel(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             case "exp":
-                tagService.updateExp((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateExp(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             case "finish":
-                tagService.updateFinish((Integer) tag.get("pid"), Boolean.parseBoolean((String) tag.get("newValue")));
+                tagService.updateFinish(Integer.valueOf(tag.get("pid")), Boolean.parseBoolean(tag.get("newValue")));
                 break;
             case "editTime":
                 // 我们假设 newValue 是毫秒级的时间戳
-                tagService.updateEditTime((Integer) tag.get("pid"), new Date(Long.parseLong((String) tag.get("newValue"))));
+                tagService.updateEditTime(Integer.valueOf(tag.get("pid")), new Date(Long.parseLong(tag.get("newValue"))));
                 break;//不一定有用，但放着就放着吧
             case "posID":
-                tagService.updatePosID((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updatePosID(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             case "did":
-                tagService.updateDid((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateDid(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             case "cid":
-                tagService.updateCid((Integer) tag.get("pid"), Integer.parseInt((String) tag.get("newValue")));
+                tagService.updateCid(Integer.valueOf(tag.get("pid")), Integer.parseInt(tag.get("newValue")));
                 break;
             default:
                 return Result.errorGetString("未知的属性名：" + (String) tag.get("propertyName"));
