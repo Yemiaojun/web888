@@ -377,5 +377,7 @@ public class ProblemService {
     }
 
 
-
+    public void deleteProblem(Integer pid) {
+        problemDao.deleteById(pid);
+    }
 }
