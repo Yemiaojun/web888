@@ -146,8 +146,6 @@ public class ProblemController {
         return Result.okGetString("标题成功更新");
     }
 
-
-
     @ApiOperation(value="查找用户所有的题目及相关标签并按等级排序", notes = "根据uid搜索所有题目以及对应的标签，并按等级排序")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "path", required = true)
@@ -188,14 +186,13 @@ public class ProblemController {
             tagService.deleteTag((Integer) problem.get("pid"));
             problemService.deleteProblem((Integer) problem.get("pid"));
 
-            return Result.okGetString("类别信息成功删除");
+            return Result.okGetString("题目成功删除");
         } catch (DataIntegrityViolationException ex) {
             // catch the exception when the foreign key constraint is violated
-            return Result.errorGetString("无法删除，因为存在相关联的标签。请先删除或修改这些标签后再试");
+            return Result.errorGetString("无法删除");
         } catch (Exception ex) {
             // catch any other unexpected exceptions
-            return Result.errorGetString("删除类别信息时发生错误: " + ex.getMessage());
+            return Result.errorGetString("删除题目信息时发生错误: " + ex.getMessage());
         }
     }
-
 }

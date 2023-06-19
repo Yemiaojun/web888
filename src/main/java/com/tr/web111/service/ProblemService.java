@@ -380,7 +380,4 @@ public class ProblemService {
         problemDao.deleteById(pid);
     }
 
-    public void deleteProblem(Integer pid) {
-        problemDao.deleteById(pid);
-    }
 }
