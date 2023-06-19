@@ -52,6 +52,7 @@ public class ProblemService {
         TagPojo tag = new TagPojo();
         tag.setPid(pid);
         tag.setEditTime(new Date());
+        tag.setExp(0);
         if(type != -1) tag.setType(type);
         if(level != -1) tag.setLevel(level);
         if(cateID != -1) tag.setCateID(cateID);

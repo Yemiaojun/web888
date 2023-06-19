@@ -44,7 +44,7 @@ public class TagService {
         if (type != null) queryWrapper.eq("type", type);
         if (cateID != null) queryWrapper.eq("cateID", cateID);
         if (level != null) queryWrapper.eq("level", level);
-        if (exp != null) queryWrapper.eq("exp", exp);
+        if (exp != 0) queryWrapper.eq("exp", exp);
         if (finish != null) queryWrapper.eq("finish", finish);
         if (editTimeStr != "未指定") {
             Date[] dateRange = parseEditTime(editTimeStr);
@@ -68,7 +68,7 @@ public class TagService {
         if (type != null) queryWrapper.eq("type", type);
         if (cateID != null) queryWrapper.eq("cateID", cateID);
         if (level != null) queryWrapper.eq("level", level);
-        if (exp != null) queryWrapper.eq("exp", exp);
+        if (exp != 0) queryWrapper.eq("exp", exp);
         if (finish != null) queryWrapper.eq("finish", finish);
         if (editTimeStr != null) {
             Date[] dateRange = parseEditTime(editTimeStr);
