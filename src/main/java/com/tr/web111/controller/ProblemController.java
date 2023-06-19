@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -141,6 +142,8 @@ public class ProblemController {
         problemService.updateTitle((Integer) prob.get("pid"), (String) prob.get("title"));
         return Result.okGetString("标题成功更新");
     }
+
+
 
     @ApiOperation(value="查找用户所有的题目及相关标签并按等级排序", notes = "根据uid搜索所有题目以及对应的标签，并按等级排序")
     @ApiImplicitParams(
