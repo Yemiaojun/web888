@@ -22,9 +22,13 @@ public class CategoryService {
 
     // 根据名称（字符串匹配）查找类别
     public List<CategoryPojo> findCategoriesByUidAndCateName(int uid, String cateName) {
+        if(cateName != null){
         return categoryDao.selectList(new QueryWrapper<CategoryPojo>()
                 .eq("uid", uid)
-                .like("cateName", cateName)); // 使用like进行模糊匹配
+                .like("cateName", cateName)); }// 使用like进行模糊匹配
+        else{
+            return categoryDao.selectList(new QueryWrapper<CategoryPojo>()
+                    .eq("uid", uid));}
     }
 
     // 修改一个类别

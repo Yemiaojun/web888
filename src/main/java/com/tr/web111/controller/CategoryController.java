@@ -38,9 +38,9 @@ public class CategoryController {
             @ApiImplicitParam(name = "uid", value = "用户id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
     })
-    @RequestMapping(value = "/findCategoriesByName/{uid}/{cateName}", method = RequestMethod.GET)
-    public String findCategoriesByUidAndCateName(@PathVariable("uid") int uid,
-                                                 @PathVariable("cateName") String cateName) {
+    @RequestMapping(value = "/findCategoriesByName", method = RequestMethod.GET)
+    public String findCategoriesByUidAndCateName(@RequestParam(value = "uid",required = true) int uid,
+                                                 @RequestParam(value = "cateName",required = false) String cateName) {
         List<CategoryPojo> categories = categoryService.findCategoriesByUidAndCateName(uid, cateName);
         return Result.okGetStringByData("成功获取类别信息", categories);
     }

@@ -22,9 +22,14 @@ public class DepartmentService {
 
     // 查找名字（字符串匹配查找）
     public List<DepartmentPojo> findDepartmentsByCidAndDname(int cid, String dname) {
+        if(dname != null){
         return departmentDao.selectList(new QueryWrapper<DepartmentPojo>()
                 .eq("cid", cid)
-                .like("dname", dname)); // 使用like进行模糊匹配
+                .like("dname", dname));} // 使用like进行模糊匹配
+        else{
+            return departmentDao.selectList(new QueryWrapper<DepartmentPojo>()
+                    .eq("cid", cid));
+        }
     }
 
     // 删除某公司下所有部门

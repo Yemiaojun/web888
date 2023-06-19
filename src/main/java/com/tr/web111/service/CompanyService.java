@@ -25,9 +25,14 @@ public class CompanyService {
 
     // 根据名称（字符串匹配）查找公司
     public List<CompanyPojo> findCompaniesByUidAndCname(int uid, String cname) {
+        if(cname != null){
         return companyDao.selectList(new QueryWrapper<CompanyPojo>()
                 .eq("uid", uid)
-                .like("cname", cname));
+                .like("cname", cname));}
+        else{
+            return companyDao.selectList(new QueryWrapper<CompanyPojo>()
+                    .eq("uid", uid));
+        }
     }
 
     // 修改一个公司

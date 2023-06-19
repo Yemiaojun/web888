@@ -22,9 +22,14 @@ public class PositionService {
 
     // 查找名字（字符串匹配查找）
     public List<PositionPojo> findPositionsByUidAndPosName(int uid, String posName) {
+        if(posName != null){
         return positionDao.selectList(new QueryWrapper<PositionPojo>()
                 .eq("uid", uid)
-                .like("posName", posName)); // 使用like进行模糊匹配
+                .like("posName", posName));} // 使用like进行模糊匹配
+        else{
+            return positionDao.selectList(new QueryWrapper<PositionPojo>()
+                    .eq("uid", uid));
+        }
     }
 
     // 修改一条position
