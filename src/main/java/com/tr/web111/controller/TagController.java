@@ -44,8 +44,9 @@ public class TagController {
                                     @RequestParam(value = "finish", required = false) Boolean finish,
                                     @RequestParam(value = "editTime", required = false) String editTimeStr,
                                     @RequestParam(value = "posID", required = false) Integer posID,
+                                    @RequestParam(value = "cid", required = false) Integer cid,
                                     @RequestParam(value = "did", required = false) Integer did) {
-        List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTimeStr, posID, did);
+        List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTimeStr, posID, did,cid);
         return Result.okGetStringByData("查询成功", problemPids);
     }
 
@@ -74,9 +75,10 @@ public class TagController {
                                           @RequestParam(value = "editTime", required = false) String editTimeStr,
                                           @RequestParam(value = "posID", required = false) Integer posID,
                                           @RequestParam(value = "did", required = false) Integer did,
+                                          @RequestParam(value = "cid", required = false) Integer cid,
                                           @RequestParam(value = "sort", required = false) String sort) {
         if(editTimeStr==null)editTimeStr="0";
-        List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(uid, title, type, cateID, level, exp, finish, editTimeStr, posID, did, sort);
+        List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(uid, title, type, cateID, level, exp, finish, editTimeStr, posID, did,cid, sort);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
 
@@ -105,8 +107,9 @@ public class TagController {
                                    @RequestParam(value = "finish", required = false) Boolean finish,
                                    @RequestParam(value = "editTime", required = false) String editTimeStr,
                                    @RequestParam(value = "posID", required = false) Integer posID,
+                                   @RequestParam(value = "cid", required = false) Integer cid,
                                    @RequestParam(value = "did", required = false) Integer did) {
-        ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTimeStr, posID, did);
+        ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTimeStr, posID, did,cid);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
 
