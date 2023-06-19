@@ -90,24 +90,25 @@ public class TagController {
             @ApiImplicitParam(name = "level", value = "级别", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "exp", value = "经验", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "finish", value = "完成情况", dataType = "Boolean", paramType = "query", required = false),
-            @ApiImplicitParam(name = "editTime", value = "编辑时间", dataType = "Date", paramType = "query", required = false),
+            @ApiImplicitParam(name = "editTime", value = "编辑时间", dataType = "String", paramType = "query", required = false),
             @ApiImplicitParam(name = "posID", value = "职位ID", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(name = "did", value = "部门ID", dataType = "Integer", paramType = "query", required = false)
     })
-    @RequestMapping(value = "/findDtosByTagPid/{uid}/{pid}/{type}/{cateID}/{level}/{exp}/{finish}/{editTime}/{posID}/{did}", method = RequestMethod.GET)
-    public String findDtosByTagPid(@PathVariable(value = "uid", required = true) Integer uid,
-                                   @PathVariable(value = "pid", required = true) Integer pid,
-                                   @PathVariable(value = "type", required = false) Integer type,
-                                   @PathVariable(value = "cateID", required = false) Integer cateID,
-                                   @PathVariable(value = "level", required = false) Integer level,
-                                   @PathVariable(value = "exp", required = false) Integer exp,
-                                   @PathVariable(value = "finish", required = false) Boolean finish,
-                                   @PathVariable(value = "editTime", required = false) String editTimeStr,
-                                   @PathVariable(value = "posID", required = false) Integer posID,
-                                   @PathVariable(value = "did", required = false) Integer did) {
+    @RequestMapping(value = "/findDtosByTagPid", method = RequestMethod.GET)
+    public String findDtosByTagPid(@RequestParam(value = "uid", required = true) Integer uid,
+                                   @RequestParam(value = "pid", required = true) Integer pid,
+                                   @RequestParam(value = "type", required = false) Integer type,
+                                   @RequestParam(value = "cateID", required = false) Integer cateID,
+                                   @RequestParam(value = "level", required = false) Integer level,
+                                   @RequestParam(value = "exp", required = false) Integer exp,
+                                   @RequestParam(value = "finish", required = false) Boolean finish,
+                                   @RequestParam(value = "editTime", required = false) String editTimeStr,
+                                   @RequestParam(value = "posID", required = false) Integer posID,
+                                   @RequestParam(value = "did", required = false) Integer did) {
         ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTimeStr, posID, did);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
+
 
 
 
