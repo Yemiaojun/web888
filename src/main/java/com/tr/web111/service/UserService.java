@@ -33,7 +33,7 @@ public class UserService {
     public int changePassword(int uid, String password, String newPassword) {
         UserPojo foundUser = userDao.selectOne(
                 new QueryWrapper<UserPojo>()
-                        .eq("id", uid)
+                        .eq("uid", uid)
                         .eq("password", password)
         );
         if (foundUser != null) {
