@@ -308,7 +308,7 @@ public class ProblemService {
 
     public ProblemPojo findProblemByPidAndUidAndTitle(Integer pid, Integer uid, String title) {
         QueryWrapper<ProblemPojo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("pid", pid).eq("uid", uid).eq("title", title);
+        queryWrapper.eq("pid", pid).eq("uid", uid).like("title", title);
         return problemDao.selectOne(queryWrapper);
     }
 
