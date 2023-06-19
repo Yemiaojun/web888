@@ -181,10 +181,10 @@ public class ProblemController {
             @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true)
     )
     @RequestMapping(value = "/deleteProblem", method = RequestMethod.DELETE)
-    public String deleteProblem(@RequestBody Map<String,Object> problem) {
+    public String deleteProblem(@RequestBody Map<String,String> problem) {
         try {
-            tagService.deleteTag((Integer) problem.get("pid"));
-            problemService.deleteProblem((Integer) problem.get("pid"));
+            tagService.deleteTag(Integer.valueOf(problem.get("pid")));
+            problemService.deleteProblem(Integer.valueOf(problem.get("pid")));
 
             return Result.okGetString("题目成功删除");
         } catch (DataIntegrityViolationException ex) {

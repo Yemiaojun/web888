@@ -107,8 +107,13 @@ public class TagService {
                 problemTagDto.setAddTime(problemPojo.getAddTime());
                 problemTagDto.setType(tagPojo.getType());
 
-                // 使用新的服务方法获取名称
-                problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getCateID() != null) {
+                    problemTagDto.setCateID(categoryService.findCateNameByCateId(tagPojo.getCateID()));
+                } else {
+                    problemTagDto.setCateID("");
+                }
+
                 problemTagDto.setLevel(tagPojo.getLevel());
                 problemTagDto.setExp(tagPojo.getExp());
                 problemTagDto.setFinish(tagPojo.getFinish());
@@ -116,9 +121,26 @@ public class TagService {
                 // 调用timeSinceLastEdit方法设置editTime
                 problemTagDto.setEditTime(timeSinceLastEdit(tagPojo.getPid()));
 
-                problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
-                problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
-                problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getPosID() != null) {
+                    problemTagDto.setPosID(positionService.findPosNameByPosId(tagPojo.getPosID()));
+                } else {
+                    problemTagDto.setPosID("");
+                }
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getDid() != null) {
+                    problemTagDto.setDid(departmentService.findDepNameByDepId(tagPojo.getDid()));
+                } else {
+                    problemTagDto.setDid("");
+                }
+
+                // 使用新的服务方法获取名称，并进行null检查
+                if(tagPojo.getCid() != null) {
+                    problemTagDto.setCid(companyService.findCompNameByCompId(tagPojo.getCid()));
+                } else {
+                    problemTagDto.setCid("");
+                }
 
                 problemTagDtoList.add(problemTagDto);
             }
@@ -150,6 +172,7 @@ public class TagService {
 
         return problemTagDtoList;
     }
+
 
 
     public ProblemTagStringDto findDtoByTagUid(Integer uid, Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish,String editTimeStr, Integer posID, Integer did) {
