@@ -83,8 +83,8 @@ public class CategoryController {
             @ApiImplicitParam(name = "cateName", value = "类别名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addCategory", method = RequestMethod.POST)
-    public String addCategory(@RequestBody Map<String,Object> cate) {
-        int newCateId = categoryService.addCategory((Integer) cate.get("uid"), (String) cate.get("cateName"));
+    public String addCategory(@RequestBody Map<String,String> cate) {
+        int newCateId = categoryService.addCategory(Integer.valueOf(cate.get("uid")), (String) cate.get("cateName"));
         return Result.okGetStringByData("类别信息成功添加", newCateId);
 
     }

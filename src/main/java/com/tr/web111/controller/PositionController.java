@@ -84,8 +84,8 @@ public class PositionController {
             @ApiImplicitParam(name = "posName", value = "岗位名称", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addPosition", method = RequestMethod.POST)
-    public String addPosition(@RequestBody Map<String,Object> position) {
-        int newPosId = positionService.addPosition((Integer) position.get("uid"), (String) position.get("posName"));
+    public String addPosition(@RequestBody Map<String,String> position) {
+        int newPosId = positionService.addPosition(Integer.valueOf(position.get("uid")), (String) position.get("posName"));
         return Result.okGetStringByData("职位信息成功添加", newPosId);
     }
 }

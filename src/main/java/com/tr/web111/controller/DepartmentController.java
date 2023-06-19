@@ -86,8 +86,8 @@ public class DepartmentController {
             @ApiImplicitParam(name = "cid", value = "公司id", dataType = "int", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addDepartment", method = RequestMethod.POST)
-    public String addDepartment(@RequestBody Map<String,Object> depart) {
-        int newDid = departmentService.addDepartment((Integer) depart.get("uid"), (String) depart.get("dname"), (Integer) depart.get("cid"));
+    public String addDepartment(@RequestBody Map<String,String> depart) {
+        int newDid = departmentService.addDepartment(Integer.valueOf(depart.get("uid")), (String) depart.get("dname"), Integer.valueOf(depart.get("cid")));
         return Result.okGetStringByData("部门信息成功添加", newDid);
     }
 

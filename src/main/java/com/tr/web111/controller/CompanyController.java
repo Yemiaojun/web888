@@ -86,8 +86,8 @@ public class CompanyController {
             @ApiImplicitParam(name = "cname", value = "公司名字", dataType = "String", paramType = "query", required = true)
     })
     @RequestMapping(value = "/addCompany", method = RequestMethod.POST)
-    public String addCompany(@RequestBody Map<String,Object> company) {
-        int newCid = companyService.addCompany((Integer) company.get("uid"), (String) company.get("cname"));
+    public String addCompany(@RequestBody Map<String,String> company) {
+        int newCid = companyService.addCompany(Integer.valueOf(company.get("uid")), (String) company.get("cname"));
         return Result.okGetStringByData("公司信息成功添加", newCid);
     }
 }
