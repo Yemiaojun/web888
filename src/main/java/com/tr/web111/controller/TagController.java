@@ -42,10 +42,10 @@ public class TagController {
                                     @RequestParam(value = "level", required = false) Integer level,
                                     @RequestParam(value = "exp", required = false) Integer exp,
                                     @RequestParam(value = "finish", required = false) Boolean finish,
-                                    @RequestParam(value = "editTime", required = false) Date editTime,
+                                    @RequestParam(value = "editTime", required = false) String editTimeStr,
                                     @RequestParam(value = "posID", required = false) Integer posID,
                                     @RequestParam(value = "did", required = false) Integer did) {
-        List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
+        List<TagPojo> problemPids = tagService.findProblemsByTag(type, cateID, level, exp, finish, editTimeStr, posID, did);
         return Result.okGetStringByData("查询成功", problemPids);
     }
 
@@ -71,11 +71,11 @@ public class TagController {
                                           @PathVariable(value = "level", required = false) Integer level,
                                           @PathVariable(value = "exp", required = false) Integer exp,
                                           @PathVariable(value = "finish", required = false) Boolean finish,
-                                          @PathVariable(value = "editTime", required = false) Date editTime,
+                                          @PathVariable(value = "editTime", required = false) String editTimeStr,
                                           @PathVariable(value = "posID", required = false) Integer posID,
                                           @PathVariable(value = "did", required = false) Integer did,
                                           @PathVariable(value = "sort", required = false) String sort) {
-        List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(uid, title, type, cateID, level, exp, finish, editTime, posID, did, sort);
+        List<ProblemTagStringDto> problemTagDtos = tagService.findProblemTagStringDtosByTag(uid, title, type, cateID, level, exp, finish, editTimeStr, posID, did, sort);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
 
@@ -101,10 +101,10 @@ public class TagController {
                                    @PathVariable(value = "level", required = false) Integer level,
                                    @PathVariable(value = "exp", required = false) Integer exp,
                                    @PathVariable(value = "finish", required = false) Boolean finish,
-                                   @PathVariable(value = "editTime", required = false) Date editTime,
+                                   @PathVariable(value = "editTime", required = false) String editTimeStr,
                                    @PathVariable(value = "posID", required = false) Integer posID,
                                    @PathVariable(value = "did", required = false) Integer did) {
-        ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTime, posID, did);
+        ProblemTagStringDto problemTagDtos = tagService.findDtoByTagUid(uid, pid, type, cateID, level, exp, finish, editTimeStr, posID, did);
         return Result.okGetStringByData("题目和对应标签成功检索", problemTagDtos);
     }
 

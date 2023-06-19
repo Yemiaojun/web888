@@ -38,7 +38,7 @@ public class TagService {
     private ProblemService problemService;
 
     // 根据标签查找问题
-    public List<TagPojo> findProblemsByTag(Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+    public List<TagPojo> findProblemsByTag(Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, String editTimeStr, Integer posID, Integer did) {
         QueryWrapper<TagPojo> queryWrapper = new QueryWrapper<>();
 
         if (type != null) queryWrapper.eq("type", type);
@@ -46,14 +46,20 @@ public class TagService {
         if (level != null) queryWrapper.eq("level", level);
         if (exp != null) queryWrapper.eq("exp", exp);
         if (finish != null) queryWrapper.eq("finish", finish);
-        if (editTime != null) queryWrapper.eq("editTime", editTime);
+        if (editTimeStr != null) {
+            Date[] dateRange = parseEditTime(editTimeStr);
+            if (dateRange != null) {
+                queryWrapper.between("editTime", dateRange[0], dateRange[1]);
+            }
+        }
         if (posID != null) queryWrapper.eq("posID", posID);
         if (did != null) queryWrapper.eq("did", did);
 
         return tagDao.selectList(queryWrapper);
     }
 
-    public TagPojo findProblemByTag(int pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+
+    public TagPojo findProblemByTag(int pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, String editTimeStr, Integer posID, Integer did) {
         QueryWrapper<TagPojo> queryWrapper = new QueryWrapper<>();
 
         // 在这里增加pid的查询条件
@@ -64,16 +70,22 @@ public class TagService {
         if (level != null) queryWrapper.eq("level", level);
         if (exp != null) queryWrapper.eq("exp", exp);
         if (finish != null) queryWrapper.eq("finish", finish);
-        if (editTime != null) queryWrapper.eq("editTime", editTime);
+        if (editTimeStr != null) {
+            Date[] dateRange = parseEditTime(editTimeStr);
+            if (dateRange != null) {
+                queryWrapper.between("editTime", dateRange[0], dateRange[1]);
+            }
+        }
         if (posID != null) queryWrapper.eq("posID", posID);
         if (did != null) queryWrapper.eq("did", did);
 
         return tagDao.selectOne(queryWrapper);
     }
 
-    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did, String sort) {
+
+    public List<ProblemTagStringDto> findProblemTagStringDtosByTag(Integer uid, String title, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, String editTimeStr, Integer posID, Integer did, String sort) {
         // 根据Tag查找问题
-        List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTime, posID, did);
+        List<TagPojo> tagPojoList = findProblemsByTag(type, cateID, level, exp, finish, editTimeStr, posID, did);
 
         List<ProblemTagStringDto> problemTagDtoList = new ArrayList<>();
 
@@ -140,14 +152,14 @@ public class TagService {
     }
 
 
-    public ProblemTagStringDto findDtoByTagUid(Integer uid, Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish, Date editTime, Integer posID, Integer did) {
+    public ProblemTagStringDto findDtoByTagUid(Integer uid, Integer pid, Integer type, Integer cateID, Integer level, Integer exp, Boolean finish,String editTimeStr, Integer posID, Integer did) {
         // 根据pid和uid在ProblemService中查找Problem
         ProblemPojo problemPojo = problemService.findProblemByPidAndUid(pid, uid);
 
         // 如果找到符合条件的问题
         if (problemPojo != null) {
             // 查找标签
-            TagPojo tagPojo = findProblemByTag(pid, type, cateID, level, exp, finish, editTime, posID, did);
+            TagPojo tagPojo = findProblemByTag(pid, type, cateID, level, exp, finish, editTimeStr, posID, did);
 
             // 如果找到符合条件的标签，创建ProblemTagStringDto并设置属性
             if (tagPojo != null) {
@@ -322,4 +334,34 @@ public class TagService {
             return "无此pid对应的Tag信息";
         }
     }
+
+
+    public Date[] parseEditTime(String editTimeStr) {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate;
+        Date[] dateRange = new Date[2];
+
+        switch (editTimeStr) {
+            case "近一周":
+                startDate = now.minusWeeks(1);
+                break;
+            case "近一个月":
+                startDate = now.minusMonths(1);
+                break;
+            case "近半年":
+                startDate = now.minusMonths(6);
+                break;
+            case "超过半年":
+                startDate = now.minusYears(50); // 随意设定一个较大的年份，可以根据实际情况调整
+                break;
+            default:
+                return null; // 如果输入的字符串不匹配任何情况，返回null
+        }
+
+        dateRange[0] = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        dateRange[1] = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        return dateRange;
+    }
+
 }
