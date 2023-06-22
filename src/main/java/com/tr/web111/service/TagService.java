@@ -389,7 +389,50 @@ public class TagService {
         return dateRange;
     }
 
-    public void deleteTag(Integer pid) {
-        tagDao.deleteById(pid);
+        public void deleteTag(Integer pid) {
+            tagDao.deleteById(pid);
+        }
+
+    public void NullTag(Integer pid, String fieldName) {
+        TagPojo tagPojo = tagDao.selectById(pid);
+        if (tagPojo == null) {
+            throw new IllegalArgumentException("Tag with pid " + pid + " not found");
+        }
+
+        switch(fieldName) {
+            case "type":
+                tagPojo.setType(null);
+                break;
+            case "cateID":
+                tagPojo.setCateID(null);
+                break;
+            case "level":
+                tagPojo.setLevel(null);
+                break;
+            case "exp":
+                tagPojo.setExp(null);
+                break;
+            case "finish":
+                tagPojo.setFinish(null);
+                break;
+            case "editTime":
+                tagPojo.setEditTime(null);
+                break;
+            case "posID":
+                tagPojo.setPosID(null);
+                break;
+            case "did":
+                tagPojo.setDid(null);
+                break;
+            case "cid":
+                tagPojo.setCid(null);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid field name " + fieldName);
+        }
+
+        tagDao.updateById(tagPojo);
     }
+
+
 }

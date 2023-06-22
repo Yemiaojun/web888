@@ -169,4 +169,21 @@ public class TagController {
         return Result.okGetStringByData("查询成功", timeDescription);
     }
 
+    @ApiOperation(value="设置一个标签属性为空", notes = "根据pid和属性名称将该属性设置为空")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pid", value = "题目id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "property", value = "需要置空的属性名称", dataType = "string", paramType = "query", required = true)
+    })
+    @RequestMapping(value = "/setTagPropertyNull", method = RequestMethod.PUT)
+    public String setTagPropertyNull(@RequestBody Map<String,String> tagProperty) {
+        try {
+            tagService.NullTag(Integer.valueOf(tagProperty.get("pid")), tagProperty.get("property"));
+            return Result.okGetString("题目属性成功设置为空");
+        } catch (Exception ex) {
+            // catch any other unexpected exceptions
+            return Result.errorGetString("设置题目属性为空时发生错误: " + ex.getMessage());
+        }
+    }
+
+
 }
